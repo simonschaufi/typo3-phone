@@ -42,6 +42,12 @@ public function initializeUpdateAction(): void
 }
 ```
 
+You instruct the validator to detect which country the number belongs to using the `AUTO` keyword (and optionally any fallback countries).
+
+For any fallbacks, use the [*ISO 3166-1 alpha-2 compliant*](http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements) country codes, feel free to add as many country codes as you like.
+
+The validator will try to extract the country from the number itself and then check if the number is valid for that country. If the country could not be guessed it will be validated using the fallback countries if provided. Note that country guessing will only work when phone numbers are entered in *international format* (prefixed with a `+` sign, e.g. +32 ....). Leading double zeros will **NOT** be parsed correctly as this isn't an established consistency.
+
 if you want to use the validator within a controller action, use the following code:
 
 Info: In my case the Address Object has a property "country" that is of type `\SJBR\StaticInfoTables\Domain\Model\Country`
