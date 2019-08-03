@@ -18,20 +18,9 @@ For each action (here updateAction) you want to validate your object (in our cas
 add the following code in your controller:
 
 ```php
-use libphonenumber\PhoneNumberUtil;
 use SimonSchaufi\TYPO3Phone\Exception\NumberParseException;
 use SimonSchaufi\TYPO3Phone\PhoneNumber;
 use SimonSchaufi\TYPO3Phone\Validation\Validator\PhoneValidator;
-
-/**
- * @var \libphonenumber\PhoneNumberUtil
- */
-protected $phoneNumberUtil;
-
-public function injectPhoneNumberUtil()
-{
-	$this->phoneNumberUtil = PhoneNumberUtil::getInstance();
-}
 
 public function initializeUpdateAction(): void
 {
@@ -58,6 +47,9 @@ if you want to use the validator within a controller action, use the following c
 Info: In my case the Address Object has a property "country" that is of type `\SJBR\StaticInfoTables\Domain\Model\Country`
 
 ```php
+use SimonSchaufi\TYPO3Phone\Exception\NumberParseException;
+use SimonSchaufi\TYPO3Phone\PhoneNumber;
+
 if (strlen($address->getPhone()) > 0) {
 	try {
 		$phoneNumber = PhoneNumber::make($address->getPhone(), [$address->getCountry()->getIsoCodeA2()])->formatInternational();
@@ -86,6 +78,8 @@ use SimonSchaufi\TYPO3Phone\PhoneNumber;
 A PhoneNumber can be formatted in various ways:
 
 ```php
+use SimonSchaufi\TYPO3Phone\PhoneNumber;
+
 PhoneNumber::make('012 34 56 78', 'BE')->format($format);       // See libphonenumber\PhoneNumberFormat
 PhoneNumber::make('012 34 56 78', 'BE')->formatE164();          // +3212345678
 PhoneNumber::make('012 34 56 78', 'BE')->formatInternational(); // +32 12 34 56 78
@@ -107,6 +101,8 @@ PhoneNumber::make('012 34 56 78', 'BE')->formatForMobileDialingInCountry('US'); 
 Get some information about the phone number:
 
 ```php
+use SimonSchaufi\TYPO3Phone\PhoneNumber;
+
 PhoneNumber::make('012 34 56 78', 'BE')->getType();              // 'fixed_line'
 PhoneNumber::make('012 34 56 78', 'BE')->isOfType('fixed_line'); // true
 PhoneNumber::make('012 34 56 78', 'BE')->getCountry();           // 'BE'
