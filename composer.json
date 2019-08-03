@@ -1,0 +1,32 @@
+{
+	"name": "simonschaufi/typo3-phone",
+	"type": "typo3-cms-extension",
+	"description": "Adds phone number functionality to TYPO3 based on Google's libphonenumber API.",
+	"keywords": [
+		"TYPO3",
+		"libphonenumber",
+		"validation",
+		"phone"
+	],
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Simon Schaufelberger",
+			"email": "simonschaufi@users.noreply.github.com"
+		}
+	],
+	"require": {
+		"php": "^7.1",
+		"giggsey/libphonenumber-for-php": "^7.0|^8.0",
+		"julien-c/iso3166": "^2.0",
+		"simonschaufi/typo3-support": "*"
+	},
+	"autoload": {
+		"psr-4": {
+			"SimonSchaufi\\TYPO3Phone\\": "Classes"
+		}
+	},
+	"config": {
+		"sort-packages": true
+	}
+}

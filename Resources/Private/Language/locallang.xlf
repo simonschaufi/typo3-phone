@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2019-03-17T17:36:48Z">
+		<header>
+			<type>database</type>
+			<description>Language labels for database tables/fields belonging to extension 'typo3_phone'</description>
+			<generator>LFEditor</generator>
+			<authorName>Simon Schaufelberger</authorName>
+		</header>
+		<body>
+			<trans-unit id="error_invalid_number_format">
+				<source><![CDATA[Invalid format]]></source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
