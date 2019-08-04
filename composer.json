@@ -17,9 +17,10 @@
 	],
 	"require": {
 		"php": "^7.1",
-		"giggsey/libphonenumber-for-php": "^7.0|^8.0",
+		"giggsey/libphonenumber-for-php": "^7.0 || ^8.0",
 		"julien-c/iso3166": "^2.0",
-		"simonschaufi/typo3-support": "*"
+		"simonschaufi/typo3-support": "*",
+		"typo3/cms-core": "^8.7 || ^9.5"
 	},
 	"autoload": {
 		"psr-4": {
