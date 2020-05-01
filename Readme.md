@@ -28,18 +28,18 @@ public function initializeUpdateAction(): void
 		/** @var \TYPO3\CMS\Extbase\Validation\ValidatorResolver */
 		$addressValidator = $this->validatorResolver->getBaseValidatorConjunction(Address::class);
     
-        $validators = $addressValidator->getValidators();
-        $validators->rewind();
-        $validator = $validators->current();
+		$validators = $addressValidator->getValidators();
+		$validators->rewind();
+		$validator = $validators->current();
 
-        /* @var \TYPO3\CMS\Extbase\Validation\Validator\GenericObjectValidator $validator */
-        $phoneValidator = $this->validatorResolver->createValidator(PhoneValidator::class, [
-            // If the user enters a number prefixed with "+" then the country can be guessed.
-            // If not, the following countries listed in the array will be checked against
-            'countries' => ['AUTO', 'DE']
-        ]);
-        $validator->addPropertyValidator('phone', $phoneValidator);
-        $validator->addPropertyValidator('fax', $phoneValidator);
+		/* @var \TYPO3\CMS\Extbase\Validation\Validator\GenericObjectValidator $validator */
+		$phoneValidator = $this->validatorResolver->createValidator(PhoneValidator::class, [
+			// If the user enters a number prefixed with "+" then the country can be guessed.
+			// If not, the following countries listed in the array will be checked against
+			'countries' => ['AUTO', 'DE']
+		]);
+		$validator->addPropertyValidator('phone', $phoneValidator);
+		$validator->addPropertyValidator('fax', $phoneValidator);
 	}
 }
 ```
