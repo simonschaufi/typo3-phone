@@ -20,8 +20,6 @@ For each action (here updateAction) you want to validate your object (in our cas
 add the following code in your controller:
 
 ```php
-use SimonSchaufi\TYPO3Phone\Exception\NumberParseException;
-use SimonSchaufi\TYPO3Phone\PhoneNumber;
 use SimonSchaufi\TYPO3Phone\Validation\Validator\PhoneValidator;
 
 public function initializeUpdateAction(): void
@@ -29,17 +27,19 @@ public function initializeUpdateAction(): void
 	if ($this->request->hasArgument('address') && $this->request->getArgument('address')) {
 		/** @var \TYPO3\CMS\Extbase\Validation\ValidatorResolver */
 		$addressValidator = $this->validatorResolver->getBaseValidatorConjunction(Address::class);
+    
+        $validators = $addressValidator->getValidators();
+        $validators->rewind();
+        $validator = $validators->current();
 
-		foreach ($addressValidator->getValidators() as $validator) {
-			/* @var \TYPO3\CMS\Extbase\Validation\Validator\GenericObjectValidator $validator */
-			$phoneValidator = $this->validatorResolver->createValidator(PhoneValidator::class, [
-				// If the user enters a number prefixed with "+" then the country can be guessed.
-				// If not, the following countries listed in the array will be checked against
-				'countries' => ['AUTO','DE']
-			]);
-			$validator->addPropertyValidator('phone', $phoneValidator);
-			$validator->addPropertyValidator('fax', $phoneValidator);
-		}
+        /* @var \TYPO3\CMS\Extbase\Validation\Validator\GenericObjectValidator $validator */
+        $phoneValidator = $this->validatorResolver->createValidator(PhoneValidator::class, [
+            // If the user enters a number prefixed with "+" then the country can be guessed.
+            // If not, the following countries listed in the array will be checked against
+            'countries' => ['AUTO', 'DE']
+        ]);
+        $validator->addPropertyValidator('phone', $phoneValidator);
+        $validator->addPropertyValidator('fax', $phoneValidator);
 	}
 }
 ```
