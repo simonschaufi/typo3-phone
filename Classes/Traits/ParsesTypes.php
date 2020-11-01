@@ -16,7 +16,7 @@ trait ParsesTypes
      *
      * @var array
      */
-    protected static $types;
+    protected static $resolvedTypes;
 
     /**
      * Determine whether the given type is valid.
@@ -43,12 +43,12 @@ trait ParsesTypes
         return Collection::make(is_array($types) ? $types : func_get_args())
             ->map(function ($type) {
                 // If the type equals a constant's value, just return it.
-                if (is_numeric($type) && in_array($type, static::$types, true)) {
+                if (is_numeric($type) && in_array($type, static::$resolvedTypes, true)) {
                     return (int)$type;
                 }
 
                 // Otherwise we'll assume the type is the constant's name.
-                return Arr::get(static::$types, strtoupper($type));
+                return Arr::get(static::$resolvedTypes, strtoupper($type));
             })
             ->reject(function ($value) {
                 return is_null($value) || $value === false;
@@ -67,7 +67,7 @@ trait ParsesTypes
 
         return array_keys(
             array_intersect(
-                static::$types,
+                static::$resolvedTypes,
                 static::parseTypes($types)
             )
         );
@@ -78,8 +78,8 @@ trait ParsesTypes
      */
     private static function loadTypes(): void
     {
-        if (! static::$types) {
-            static::$types = with(new ReflectionClass(PhoneNumberType::class))->getConstants();
+        if (! static::$resolvedTypes) {
+            static::$resolvedTypes = with(new ReflectionClass(PhoneNumberType::class))->getConstants();
         }
     }
 }

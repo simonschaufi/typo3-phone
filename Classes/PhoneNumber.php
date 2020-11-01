@@ -9,6 +9,7 @@ use JsonSerializable;
 use libphonenumber\NumberParseException as libNumberParseException;
 use libphonenumber\PhoneNumber as libPhoneNumber;
 use libphonenumber\PhoneNumberFormat;
+use libphonenumber\PhoneNumberType;
 use libphonenumber\PhoneNumberUtil;
 use ReflectionException;
 use Serializable;
@@ -266,11 +267,15 @@ class PhoneNumber implements JsonSerializable, Serializable
     protected function filterValidCountry(array $countries): string
     {
         $countries = array_filter($countries, function ($country) {
-            $instance = $this->lib->parse($this->number, $country);
+            try {
+                $instance = $this->lib->parse($this->number, $country);
 
-            return $this->lenient
-                ? $this->lib->isPossibleNumber($instance, $country)
-                : $this->lib->isValidNumberForRegion($instance, $country);
+                return $this->lenient
+                    ? $this->lib->isPossibleNumber($instance, $country)
+                    : $this->lib->isValidNumberForRegion($instance, $country);
+            } catch (libNumberParseException $e) {
+                return false;
+            }
         });
 
         $result = $countries[0] ?? null;
@@ -291,6 +296,10 @@ class PhoneNumber implements JsonSerializable, Serializable
             if ($this->lib->isValidNumber($instance)) {
                 return $this->lib->getRegionCodeForNumber($instance);
             }
+        }
+
+        if ($countries = array_filter($countries)) {
+            throw NumberParseException::countryMismatch($this->number, $countries);
         }
 
         throw NumberParseException::countryRequired($this->number);
@@ -331,7 +340,22 @@ class PhoneNumber implements JsonSerializable, Serializable
     {
         $types = static::parseTypes($type);
 
+        // Add the unsure type when applicable.
+        if (array_intersect([PhoneNumberType::FIXED_LINE, PhoneNumberType::MOBILE], $types)) {
+            $types[] = PhoneNumberType::FIXED_LINE_OR_MOBILE;
+        }
+
         return in_array($this->getType(true), $types, true);
+    }
+
+    /**
+     * Get the raw provided number.
+     *
+     * @return string
+     */
+    public function getRawNumber(): string
+    {
+        return $this->number;
     }
 
     /**
