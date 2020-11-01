@@ -34,6 +34,19 @@
             "SimonSchaufi\\TYPO3Phone\\": "Classes"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "GertKaaeHansen\\TYPO3Phone\\Tests\\": "Tests"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "@prepare-extension-test-structure"
+        ],
+        "prepare-extension-test-structure": [
+            "Nimut\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare"
+        ]
+    },
     "config": {
         "bin-dir": ".Build/bin",
         "vendor-dir": ".Build/vendor",

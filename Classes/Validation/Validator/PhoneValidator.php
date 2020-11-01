@@ -11,7 +11,6 @@ use SimonSchaufi\TYPO3Phone\Exceptions\InvalidParameterException;
 use SimonSchaufi\TYPO3Phone\PhoneNumber;
 use SimonSchaufi\TYPO3Phone\Traits\ParsesCountries;
 use SimonSchaufi\TYPO3Phone\Traits\ParsesTypes;
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Extbase\Validation\Exception\InvalidValidationOptionsException;
 use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 
@@ -112,7 +111,7 @@ class PhoneValidator extends AbstractValidator
         }
 
         $this->addError(
-            LocalizationUtility::translate(
+            $this->translateErrorMessage(
                 'error_invalid_number_format',
                 'Typo3Phone'
             ),
