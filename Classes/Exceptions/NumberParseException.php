@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace SimonSchaufi\TYPO3Phone\Exceptions;

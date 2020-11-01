@@ -1,10 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace SimonSchaufi\TYPO3Phone\Traits;
 
-use SimonSchaufi\TYPO3Support\Collection;
 use Iso3166\Codes as ISO3166;
+use SimonSchaufi\TYPO3Support\Collection;
 
 trait ParsesCountries
 {

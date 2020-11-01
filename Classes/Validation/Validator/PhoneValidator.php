@@ -1,15 +1,18 @@
 <?php
+
 declare(strict_types=1);
 
 namespace SimonSchaufi\TYPO3Phone\Validation\Validator;
 
 use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumberUtil;
+use ReflectionException;
 use SimonSchaufi\TYPO3Phone\Exceptions\InvalidParameterException;
 use SimonSchaufi\TYPO3Phone\PhoneNumber;
 use SimonSchaufi\TYPO3Phone\Traits\ParsesCountries;
 use SimonSchaufi\TYPO3Phone\Traits\ParsesTypes;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Extbase\Validation\Exception\InvalidValidationOptionsException;
 use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 
 class PhoneValidator extends AbstractValidator
@@ -18,7 +21,7 @@ class PhoneValidator extends AbstractValidator
     use ParsesTypes;
 
     /**
-     * @var \libphonenumber\PhoneNumberUtil
+     * @var PhoneNumberUtil
      */
     protected $lib;
 
@@ -38,7 +41,7 @@ class PhoneValidator extends AbstractValidator
      *
      * @param array $options
      *
-     * @throws \TYPO3\CMS\Extbase\Validation\Exception\InvalidValidationOptionsException
+     * @throws InvalidValidationOptionsException
      */
     public function __construct(array $options = [])
     {
@@ -53,18 +56,19 @@ class PhoneValidator extends AbstractValidator
      * @param mixed $value
      *
      * @return bool
-     * @throws \ReflectionException
-     * @throws \SimonSchaufi\TYPO3Phone\Exceptions\InvalidParameterException
+     * @throws ReflectionException
+     * @throws InvalidParameterException
      */
     protected function isValid($value)
     {
         $parameters = $this->getOptions();
 
-        list(
+        [
             $countries,
             $types,
             $detect,
-            $lenient) = $this->extractParameters($parameters['countries']);
+            $lenient
+        ] = $this->extractParameters($parameters['countries']);
 
         // A "null" country is prepended:
         // 1. In case of auto-detection to have the validation run first without supplying a country.
@@ -80,7 +84,7 @@ class PhoneValidator extends AbstractValidator
                 $phoneNumber = PhoneNumber::make($value, $country);
 
                 // Type validation.
-                if (! empty($types) && ! $phoneNumber->isOfType($types)) {
+                if (!empty($types) && !$phoneNumber->isOfType($types)) {
                     continue;
                 }
 
@@ -102,7 +106,7 @@ class PhoneValidator extends AbstractValidator
                 if ($this->lib->isValidNumberForRegion($phoneNumberInstance, $country)) {
                     return true;
                 }
-            } catch (NumberParseException $exception) {
+            } catch (NumberParseException $e) {
                 continue;
             }
         }
@@ -123,8 +127,7 @@ class PhoneValidator extends AbstractValidator
      * @param array $parameters
      *
      * @return array
-     * @throws \ReflectionException
-     * @throws \SimonSchaufi\TYPO3Phone\Exceptions\InvalidParameterException
+     * @throws InvalidParameterException
      */
     protected function extractParameters(array $parameters): array
     {
@@ -137,7 +140,7 @@ class PhoneValidator extends AbstractValidator
         $leftovers = array_diff_key($parameters, $types, $countries);
         $leftovers = array_diff($leftovers, ['AUTO', 'LENIENT']);
 
-        if (! empty($leftovers)) {
+        if (!empty($leftovers)) {
             throw InvalidParameterException::parameters($leftovers);
         }
 

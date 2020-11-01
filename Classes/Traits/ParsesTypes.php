@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace SimonSchaufi\TYPO3Phone\Traits;
@@ -43,7 +44,7 @@ trait ParsesTypes
             ->map(function ($type) {
                 // If the type equals a constant's value, just return it.
                 if (is_numeric($type) && in_array($type, static::$types, true)) {
-                    return (int) $type;
+                    return (int)$type;
                 }
 
                 // Otherwise we'll assume the type is the constant's name.
