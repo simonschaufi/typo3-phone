@@ -3,8 +3,9 @@
 [![Latest Stable Version](https://poser.pugx.org/simonschaufi/typo3-phone/v/stable)](https://packagist.org/packages/simonschaufi/typo3-phone)
 [![Total Downloads](https://poser.pugx.org/simonschaufi/typo3-phone/downloads)](https://packagist.org/packages/simonschaufi/typo3-phone)
 [![License](https://poser.pugx.org/simonschaufi/typo3-phone/license)](https://packagist.org/packages/simonschaufi/typo3-phone)
-[![TYPO3](https://img.shields.io/badge/TYPO3-8.7.0-orange.svg)](https://typo3.org/)
-[![TYPO3](https://img.shields.io/badge/TYPO3-9.5.0-orange.svg)](https://typo3.org/)
+[![TYPO3](https://img.shields.io/badge/TYPO3-8.7.0-orange.svg)](https://get.typo3.org/version/8)
+[![TYPO3](https://img.shields.io/badge/TYPO3-9.5.0-orange.svg)](https://get.typo3.org/version/9)
+[![TYPO3](https://img.shields.io/badge/TYPO3-10.4.0-orange.svg)](https://get.typo3.org/version/10)
 
 Adds phone number functionality to TYPO3 based on the [PHP port](https://github.com/giggsey/libphonenumber-for-php) of [Google's libphonenumber API](https://github.com/googlei18n/libphonenumber) by [giggsey](https://github.com/giggsey).
 
@@ -27,7 +28,7 @@ public function initializeUpdateAction(): void
 	if ($this->request->hasArgument('address') && $this->request->getArgument('address')) {
 		/** @var \TYPO3\CMS\Extbase\Validation\ValidatorResolver */
 		$addressValidator = $this->validatorResolver->getBaseValidatorConjunction(Address::class);
-    
+
 		$validators = $addressValidator->getValidators();
 		$validators->rewind();
 		$validator = $validators->current();
@@ -70,8 +71,8 @@ if (strlen($address->getPhone()) > 0) {
 
 ## Utility PhoneNumber class
 
-A phone number can be wrapped in the `SimonSchaufi\TYPO3Phone\PhoneNumber` class to enhance it with useful utility 
-methods. It's safe to directly reference these objects in views or when saving to the database as they will degrade 
+A phone number can be wrapped in the `SimonSchaufi\TYPO3Phone\PhoneNumber` class to enhance it with useful utility
+methods. It's safe to directly reference these objects in views or when saving to the database as they will degrade
 gracefully to the E164 format.
 
 ```php
@@ -120,4 +121,4 @@ PhoneNumber::make('+32 12 34 56 78')->isOfCountry('BE');         // true
 
 ## Giving thanks
 
-This extension is heavily inspired by https://github.com/Propaganistas/Laravel-Phone. Thank you 
+This extension is heavily inspired by https://github.com/Propaganistas/Laravel-Phone. Thank you

@@ -11,10 +11,10 @@ $EM_CONF[$_EXTKEY] = [
     'author' => 'Simon Schaufelberger',
     'author_email' => 'simonschaufi+typo3phone@gmail.com',
     'author_company' => '',
-    'version' => '1.0.0',
+    'version' => '1.1.0',
     'constraints' => [
         'depends' => [
-            'php' => '7.0.0-7.2.99',
+            'php' => '7.2.0-7.4.99',
             'typo3' => '8.0.0-10.4.99'
         ],
         'conflicts' => [],
