@@ -18,6 +18,7 @@ use SimonSchaufi\TYPO3Phone\Exceptions\NumberParseException;
 use SimonSchaufi\TYPO3Phone\Traits\ParsesCountries;
 use SimonSchaufi\TYPO3Phone\Traits\ParsesFormats;
 use SimonSchaufi\TYPO3Phone\Traits\ParsesTypes;
+use TYPO3\CMS\Core\Utility\StringUtility;
 
 class PhoneNumber implements JsonSerializable, Serializable
 {
@@ -352,13 +353,7 @@ class PhoneNumber implements JsonSerializable, Serializable
      */
     protected function numberLooksInternational(): bool
     {
-        foreach ((array)$this->number as $needle) {
-            if ($needle !== '' && substr('+', 0, strlen($needle)) === (string)$needle) {
-                return true;
-            }
-        }
-
-        return false;
+        return StringUtility::beginsWith($this->number, '+');
     }
 
     /**
