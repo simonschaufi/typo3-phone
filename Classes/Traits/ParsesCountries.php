@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimonSchaufi\TYPO3Phone\Traits;
 
-use Iso3166\Codes as ISO3166;
+use League\ISO3166\ISO3166;
 use SimonSchaufi\TYPO3Support\Collection;
 
 trait ParsesCountries
@@ -17,7 +17,15 @@ trait ParsesCountries
      */
     public static function isValidCountryCode(string $country): bool
     {
-        return ISO3166::isValid($country);
+        $iso3166 = new ISO3166();
+
+        try {
+            $iso3166->alpha2($country);
+
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     /**
