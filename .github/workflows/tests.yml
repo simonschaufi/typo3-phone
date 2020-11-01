@@ -1,4 +1,4 @@
-name: tests
+name: Tests
 
 on: [push, pull_request]
 
@@ -11,7 +11,8 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         php: [7.2, 7.3, 7.4]
-        typo3: [8.7, 9.5]
+        # TYPO3 8.7 is not compatible with composer 2
+        typo3: [9.5, 10.4]
 
     name: P${{ matrix.php }} - T${{ matrix.typo3 }}
 
