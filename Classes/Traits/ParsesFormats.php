@@ -19,11 +19,10 @@ trait ParsesFormats
     /**
      * Determine whether the given format is valid.
      *
-     * @param string $format
+     * @param string|int $format
      * @return bool
-     * @throws \ReflectionException
      */
-    public static function isValidFormat($format)
+    public static function isValidFormat($format): bool
     {
         return ! is_null(static::parseFormat($format));
     }
@@ -31,11 +30,10 @@ trait ParsesFormats
     /**
      * Parse a phone format.
      *
-     * @param string $format
-     * @return string
-     * @throws \ReflectionException
+     * @param string|int $format
+     * @return int|null
      */
-    protected static function parseFormat($format)
+    protected static function parseFormat($format): ?int
     {
         static::loadFormats();
 
@@ -50,10 +48,8 @@ trait ParsesFormats
 
     /**
      * Load all available formats once.
-     *
-     * @throws \ReflectionException
      */
-    private static function loadFormats()
+    private static function loadFormats(): void
     {
         if (! static::$formats) {
             static::$formats = with(new ReflectionClass(PhoneNumberFormat::class))->getConstants();

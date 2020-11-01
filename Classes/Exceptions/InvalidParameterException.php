@@ -13,9 +13,10 @@ class InvalidParameterException extends \Exception
      * @param string $parameter
      * @return static
      */
-    public static function ambiguous($parameter)
+    public static function ambiguous(string $parameter)
     {
-        return new static('Ambiguous phone validation parameter: "' . $parameter . '". This parameter is recognized as an input field and as a phone type. Please rename the input field.');
+        return new static('Ambiguous phone validation parameter: "' . $parameter
+            . '". This parameter is recognized as an input field and as a phone type. Please rename the input field.');
     }
 
     /**

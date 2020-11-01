@@ -11,7 +11,7 @@ class CountryCodeException extends \Exception
      * @param string $country
      * @return static
      */
-    public static function invalid($country)
+    public static function invalid(string $country)
     {
         return new static('Invalid country code "' . $country . '".');
     }

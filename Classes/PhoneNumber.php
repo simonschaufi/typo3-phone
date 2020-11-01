@@ -5,6 +5,7 @@ namespace SimonSchaufi\TYPO3Phone;
 
 use Exception;
 use JsonSerializable;
+use libphonenumber\PhoneNumber as libPhoneNumber;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
 use Serializable;
@@ -59,7 +60,7 @@ class PhoneNumber implements JsonSerializable, Serializable
      *
      * @param string $number
      */
-    public function __construct($number)
+    public function __construct(string $number)
     {
         $this->number = $number;
         $this->lib = PhoneNumberUtil::getInstance();
@@ -72,7 +73,7 @@ class PhoneNumber implements JsonSerializable, Serializable
      * @param string|array $country
      * @return static
      */
-    public static function make($number, $country = [])
+    public static function make(string $number, $country = [])
     {
         $instance = new static($number);
 
@@ -105,7 +106,7 @@ class PhoneNumber implements JsonSerializable, Serializable
      * @throws \SimonSchaufi\TYPO3Phone\Exceptions\NumberFormatException
      * @throws \libphonenumber\NumberParseException
      */
-    public function formatInternational()
+    public function formatInternational(): string
     {
         return $this->format(PhoneNumberFormat::INTERNATIONAL);
     }
@@ -118,7 +119,7 @@ class PhoneNumber implements JsonSerializable, Serializable
      * @throws \SimonSchaufi\TYPO3Phone\Exceptions\NumberFormatException
      * @throws \libphonenumber\NumberParseException
      */
-    public function formatNational()
+    public function formatNational(): string
     {
         return $this->format(PhoneNumberFormat::NATIONAL);
     }
@@ -131,7 +132,7 @@ class PhoneNumber implements JsonSerializable, Serializable
      * @throws \SimonSchaufi\TYPO3Phone\Exceptions\NumberFormatException
      * @throws \libphonenumber\NumberParseException
      */
-    public function formatE164()
+    public function formatE164(): string
     {
         return $this->format(PhoneNumberFormat::E164);
     }
@@ -144,7 +145,7 @@ class PhoneNumber implements JsonSerializable, Serializable
      * @throws \SimonSchaufi\TYPO3Phone\Exceptions\NumberFormatException
      * @throws \libphonenumber\NumberParseException
      */
-    public function formatRFC3966()
+    public function formatRFC3966(): string
     {
         return $this->format(PhoneNumberFormat::RFC3966);
     }
@@ -159,7 +160,7 @@ class PhoneNumber implements JsonSerializable, Serializable
      * @throws \SimonSchaufi\TYPO3Phone\Exceptions\NumberFormatException
      * @throws \libphonenumber\NumberParseException
      */
-    public function format($format)
+    public function format($format): string
     {
         $parsedFormat = static::parseFormat($format);
 
@@ -182,7 +183,7 @@ class PhoneNumber implements JsonSerializable, Serializable
      * @throws \SimonSchaufi\TYPO3Phone\Exceptions\CountryCodeException
      * @throws \libphonenumber\NumberParseException
      */
-    public function formatForCountry($country)
+    public function formatForCountry(string $country): string
     {
         if (! static::isValidCountryCode($country)) {
             throw CountryCodeException::invalid($country);
@@ -204,7 +205,7 @@ class PhoneNumber implements JsonSerializable, Serializable
      * @throws \SimonSchaufi\TYPO3Phone\Exceptions\CountryCodeException
      * @throws \libphonenumber\NumberParseException
      */
-    public function formatForMobileDialingInCountry($country, $removeFormatting = false)
+    public function formatForMobileDialingInCountry(string $country, bool $removeFormatting = false): string
     {
         if (! static::isValidCountryCode($country)) {
             throw CountryCodeException::invalid($country);
@@ -221,10 +222,10 @@ class PhoneNumber implements JsonSerializable, Serializable
      * Get the phone number's country.
      *
      * @return string
-     * @throws \SimonSchaufi\TYPO3Phone\Exceptions\NumberParseException
+     * @throws NumberParseException
      * @throws \libphonenumber\NumberParseException
      */
-    public function getCountry()
+    public function getCountry(): string
     {
         if (! $this->country) {
             $this->country = $this->filterValidCountry($this->countries);
@@ -239,26 +240,26 @@ class PhoneNumber implements JsonSerializable, Serializable
      * @param string|array $country
      *
      * @return bool
-     * @throws \SimonSchaufi\TYPO3Phone\Exceptions\NumberParseException
+     * @throws NumberParseException
      * @throws \libphonenumber\NumberParseException
      */
-    public function isOfCountry($country)
+    public function isOfCountry($country): bool
     {
         $countries = static::parseCountries($country);
 
-        return in_array($this->getCountry(), $countries);
+        return in_array($this->getCountry(), $countries, true);
     }
 
     /**
      * Filter the provided countries to the one that is valid for the number.
      *
-     * @param string|array $countries
+     * @param array $countries
      *
      * @return string
-     * @throws \SimonSchaufi\TYPO3Phone\Exceptions\NumberParseException
+     * @throws NumberParseException
      * @throws \libphonenumber\NumberParseException
      */
-    protected function filterValidCountry($countries)
+    protected function filterValidCountry(array $countries): string
     {
         $countries = array_filter($countries, function ($country) {
             $instance = $this->lib->parse($this->number, $country);
@@ -300,7 +301,7 @@ class PhoneNumber implements JsonSerializable, Serializable
      * @throws \ReflectionException
      * @throws \libphonenumber\NumberParseException
      */
-    public function getType($asConstant = false)
+    public function getType(bool $asConstant = false)
     {
         $type = $this->lib->getNumberType($this->getPhoneNumberInstance());
 
@@ -322,7 +323,7 @@ class PhoneNumber implements JsonSerializable, Serializable
      * @throws \ReflectionException
      * @throws \libphonenumber\NumberParseException
      */
-    public function isOfType($type)
+    public function isOfType($type): bool
     {
         $types = static::parseTypes($type);
 
@@ -332,11 +333,11 @@ class PhoneNumber implements JsonSerializable, Serializable
     /**
      * Get the PhoneNumber instance of the current number.
      *
-     * @return \libphonenumber\PhoneNumber
-     * @throws \SimonSchaufi\TYPO3Phone\Exceptions\NumberParseException
+     * @return libPhoneNumber
+     * @throws NumberParseException
      * @throws \libphonenumber\NumberParseException
      */
-    public function getPhoneNumberInstance()
+    public function getPhoneNumberInstance(): libPhoneNumber
     {
         return $this->lib->parse($this->number, $this->getCountry());
     }
@@ -346,7 +347,7 @@ class PhoneNumber implements JsonSerializable, Serializable
      *
      * @return bool
      */
-    protected function numberLooksInternational()
+    protected function numberLooksInternational(): bool
     {
         foreach ((array) $this->number as $needle) {
             if ($needle !== '' && substr('+', 0, strlen($needle)) === (string) $needle) {
@@ -362,7 +363,7 @@ class PhoneNumber implements JsonSerializable, Serializable
      *
      * @return $this
      */
-    public function lenient()
+    public function lenient(): self
     {
         $this->lenient = true;
 
@@ -379,7 +380,7 @@ class PhoneNumber implements JsonSerializable, Serializable
      * @throws \SimonSchaufi\TYPO3Phone\Exceptions\NumberFormatException
      * @throws \libphonenumber\NumberParseException
      */
-    public function toJson($options = 0)
+    public function toJson($options = 0): string
     {
         return json_encode($this->jsonSerialize(), $options);
     }
@@ -415,7 +416,7 @@ class PhoneNumber implements JsonSerializable, Serializable
      *
      * @param string $serialized
      *
-     * @throws \SimonSchaufi\TYPO3Phone\Exceptions\NumberParseException
+     * @throws NumberParseException
      * @throws \libphonenumber\NumberParseException
      */
     public function unserialize($serialized)

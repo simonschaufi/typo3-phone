@@ -126,7 +126,7 @@ class PhoneValidator extends AbstractValidator
      * @throws \ReflectionException
      * @throws \SimonSchaufi\TYPO3Phone\Exceptions\InvalidParameterException
      */
-    protected function extractParameters(array $parameters)
+    protected function extractParameters(array $parameters): array
     {
         $countries = static::parseCountries($parameters);
         $types = static::parseTypes($parameters);
@@ -144,8 +144,8 @@ class PhoneValidator extends AbstractValidator
         return [
             $countries,
             $types,
-            in_array('AUTO', $parameters),
-            in_array('LENIENT', $parameters),
+            in_array('AUTO', $parameters, true),
+            in_array('LENIENT', $parameters, true),
         ];
     }
 }

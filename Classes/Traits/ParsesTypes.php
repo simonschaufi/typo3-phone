@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace SimonSchaufi\TYPO3Phone\Traits;
 
-use SimonSchaufi\TYPO3Support\Arr;
-use SimonSchaufi\TYPO3Support\Collection;
 use libphonenumber\PhoneNumberType;
 use ReflectionClass;
+use SimonSchaufi\TYPO3Support\Arr;
+use SimonSchaufi\TYPO3Support\Collection;
 
 trait ParsesTypes
 {
@@ -23,9 +23,8 @@ trait ParsesTypes
      * @param string $type
      *
      * @return bool
-     * @throws \ReflectionException
      */
-    public static function isValidType($type)
+    public static function isValidType($type): bool
     {
         return !empty(static::parseTypes($type));
     }
@@ -35,16 +34,15 @@ trait ParsesTypes
      *
      * @param string|array $types
      * @return array
-     * @throws \ReflectionException
      */
-    protected static function parseTypes($types)
+    protected static function parseTypes($types): array
     {
         static::loadTypes();
 
         return Collection::make(is_array($types) ? $types : func_get_args())
             ->map(function ($type) {
                 // If the type equals a constant's value, just return it.
-                if (is_numeric($type) && in_array($type, static::$types)) {
+                if (is_numeric($type) && in_array($type, static::$types, true)) {
                     return (int) $type;
                 }
 
@@ -61,9 +59,8 @@ trait ParsesTypes
      *
      * @param string|array $types
      * @return array
-     * @throws \ReflectionException
      */
-    protected static function parseTypesAsStrings($types)
+    protected static function parseTypesAsStrings($types): array
     {
         static::loadTypes();
 
@@ -77,10 +74,8 @@ trait ParsesTypes
 
     /**
      * Load all available formats once.
-     *
-     * @throws \ReflectionException
      */
-    private static function loadTypes()
+    private static function loadTypes(): void
     {
         if (! static::$types) {
             static::$types = with(new ReflectionClass(PhoneNumberType::class))->getConstants();

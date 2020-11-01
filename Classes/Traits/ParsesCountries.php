@@ -14,7 +14,7 @@ trait ParsesCountries
      * @param string $country
      * @return bool
      */
-    public static function isValidCountryCode($country): bool
+    public static function isValidCountryCode(string $country): bool
     {
         return ISO3166::isValid($country);
     }
@@ -25,7 +25,7 @@ trait ParsesCountries
      * @param string|array $countries
      * @return array
      */
-    protected function parseCountries($countries)
+    protected static function parseCountries($countries): array
     {
         return Collection::make(is_array($countries) ? $countries : func_get_args())
             ->map(function ($country) {

@@ -13,7 +13,7 @@ class NumberParseException extends libNumberParseException
      * @param string $number
      * @return static
      */
-    public static function countryRequired($number)
+    public static function countryRequired(string $number)
     {
         return new static(
             libNumberParseException::INVALID_COUNTRY_CODE,

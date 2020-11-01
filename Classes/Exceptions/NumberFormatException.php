@@ -11,7 +11,7 @@ class NumberFormatException extends \Exception
      * @param string $format
      * @return static
      */
-    public static function invalid($format)
+    public static function invalid(string $format)
     {
         return new static('Invalid number format "' . $format . '".');
     }
