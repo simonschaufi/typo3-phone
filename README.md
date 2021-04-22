@@ -49,6 +49,8 @@ Alternatively you can instantiate the validator anywhere in your code like this:
 
 ```php
 use SimonSchaufi\TYPO3Phone\Validation\Validator\PhoneValidator;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Validation\Validator\ValidatorInterface;
 use TYPO3\CMS\Extbase\Validation\ValidatorResolver;
 
 $validatorResolver = GeneralUtility::makeInstance(ValidatorResolver::class);
