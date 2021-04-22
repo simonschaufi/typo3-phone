@@ -7,6 +7,7 @@ namespace GertKaaeHansen\TYPO3Phone\Tests\Unit\Validation\Validator;
 use Nimut\TestingFramework\MockObject\AccessibleMockObjectInterface;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use SimonSchaufi\TYPO3Phone\Exceptions\InvalidParameterException;
 use SimonSchaufi\TYPO3Phone\Validation\Validator\PhoneValidator;
 use TYPO3\CMS\Extbase\Validation\Exception\InvalidValidationOptionsException;
 
@@ -50,28 +51,28 @@ class PhoneValidatorTest extends UnitTestCase
     public function it_validates_with_default_countries_with_type(): void
     {
         // Validator with correct country value, correct type.
-        self::assertFalse($this->getValidator(['countries' => ['BE', 'mobile']])->validate('0470123456')->hasErrors());
+        self::assertFalse($this->getValidator(['countries' => ['BE'], 'types' => ['mobile']])->validate('0470123456')->hasErrors());
 
         // Validator with correct country value, wrong type.
-        self::assertTrue($this->getValidator(['countries' => ['BE', 'mobile']])->validate('012345678')->hasErrors());
+        self::assertTrue($this->getValidator(['countries' => ['BE'], 'types' => ['mobile']])->validate('012345678')->hasErrors());
 
         // Validator with wrong country value, correct type.
-        self::assertTrue($this->getValidator(['countries' => ['NL', 'mobile']])->validate('0470123456')->hasErrors());
+        self::assertTrue($this->getValidator(['countries' => ['NL'], 'types' => ['mobile']])->validate('0470123456')->hasErrors());
 
         // Validator with wrong country value, wrong type.
-        self::assertTrue($this->getValidator(['countries' => ['NL', 'mobile']])->validate('012345678')->hasErrors());
+        self::assertTrue($this->getValidator(['countries' => ['NL'], 'types' => ['mobile']])->validate('012345678')->hasErrors());
 
         // Validator with multiple country values, one correct, correct type.
-        self::assertFalse($this->getValidator(['countries' => ['BE', 'NL', 'mobile']])->validate('0470123456')->hasErrors());
+        self::assertFalse($this->getValidator(['countries' => ['BE', 'NL'], 'types' => ['mobile']])->validate('0470123456')->hasErrors());
 
         // Validator with multiple country values, one correct, wrong type.
-        self::assertTrue($this->getValidator(['countries' => ['BE', 'NL', 'mobile']])->validate('012345678')->hasErrors());
+        self::assertTrue($this->getValidator(['countries' => ['BE', 'NL'], 'types' => ['mobile']])->validate('012345678')->hasErrors());
 
         // Validator with multiple country values, none correct, correct type.
-        self::assertTrue($this->getValidator(['countries' => ['DE', 'NL', 'mobile']])->validate('0470123456')->hasErrors());
+        self::assertTrue($this->getValidator(['countries' => ['DE', 'NL'], 'types' => ['mobile']])->validate('0470123456')->hasErrors());
 
         // Validator with multiple country values, none correct, wrong type.
-        self::assertTrue($this->getValidator(['countries' => ['DE', 'NL', 'mobile']])->validate('012345678')->hasErrors());
+        self::assertTrue($this->getValidator(['countries' => ['DE', 'NL'], 'types' => ['mobile']])->validate('012345678')->hasErrors());
     }
 
     /** @test */
@@ -98,6 +99,8 @@ class PhoneValidatorTest extends UnitTestCase
     {
         // Validator with no country field or given country.
         self::assertTrue($this->getValidator(['countries' => []])->validate('012345678')->hasErrors());
+
+        $this->expectException(InvalidParameterException::class);
 
         // Validator with no country field or given country, wrong type.
         self::assertTrue($this->getValidator(['countries' => ['mobile']])->validate('012345678')->hasErrors());
