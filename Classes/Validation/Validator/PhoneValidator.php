@@ -33,6 +33,11 @@ class PhoneValidator extends AbstractValidator
             'Array of countries',
             'array'
         ],
+        'types' => [
+            [],
+            'Array of phone number types',
+            'array'
+        ],
     ];
 
     /**
@@ -67,7 +72,7 @@ class PhoneValidator extends AbstractValidator
             $types,
             $detect,
             $lenient
-        ] = $this->extractParameters($parameters['countries']);
+        ] = $this->extractParameters($parameters);
 
         // A "null" country is prepended:
         // 1. In case of auto-detection to have the validation run first without supplying a country.
@@ -130,13 +135,13 @@ class PhoneValidator extends AbstractValidator
      */
     protected function extractParameters(array $parameters): array
     {
-        $countries = static::parseCountries($parameters);
-        $types = static::parseTypes($parameters);
+        $countries = static::parseCountries($parameters['countries']);
+        $types = static::parseTypes($parameters['types']);
 
         // Force developers to write proper code.
         // Since the static parsers return a validated array with preserved keys, we can safely diff against the keys.
         // Unfortunately we can't use $collection->diffKeys() as it's not available yet in earlier 5.* versions.
-        $leftovers = array_diff_key($parameters, $types, $countries);
+        $leftovers = array_diff_key($parameters['countries'], $types, $countries);
         $leftovers = array_diff($leftovers, ['AUTO', 'LENIENT']);
 
         if (!empty($leftovers)) {
@@ -146,8 +151,8 @@ class PhoneValidator extends AbstractValidator
         return [
             $countries,
             $types,
-            in_array('AUTO', $parameters, true),
-            in_array('LENIENT', $parameters, true),
+            in_array('AUTO', $parameters['countries'], true),
+            in_array('LENIENT', $parameters['countries'], true),
         ];
     }
 }
