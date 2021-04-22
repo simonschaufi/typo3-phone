@@ -55,20 +55,20 @@ use TYPO3\CMS\Extbase\Validation\ValidatorResolver;
 
 $validatorResolver = GeneralUtility::makeInstance(ValidatorResolver::class);
 $phoneValidator = $validatorResolver->createValidator(PhoneValidator::class, [
-  // If the user enters a number prefixed with "+" then the country can be guessed.
-  // If not, the following countries listed in the array will be checked against
-  'countries' => ['AUTO', 'DE'],
-  'types' => ['MOBILE']
+	// If the user enters a number prefixed with "+" then the country can be guessed.
+	// If not, the following countries listed in the array will be checked against
+	'countries' => ['AUTO', 'DE'],
+	'types' => ['MOBILE']
 ]);
 
 if (!($phoneValidator instanceof ValidatorInterface)) {
-    throw new \Exception('Could not create phone validator', 1619106647);
+	throw new \Exception('Could not create phone validator', 1619106647);
 }
 
 $result = $phoneValidator->validate($phone);
 
 if ($result->hasErrors()) {
-  // Error handling
+	// Error handling
 }
 ```
 
