@@ -65,7 +65,7 @@ if (!($phoneValidator instanceof ValidatorInterface)) {
 	throw new \Exception('Could not create phone validator', 1619106647);
 }
 
-$result = $phoneValidator->validate($phone);
+$result = $phoneValidator->validate('+3212345678');
 
 if ($result->hasErrors()) {
 	// Error handling
@@ -94,7 +94,7 @@ if (!empty($address->getPhone())) {
 		$phoneNumber = PhoneNumber::make($address->getPhone(), [$address->getCountry()->getIsoCodeA2()])->formatInternational();
 		$address->setPhone($phoneNumber);
 	} catch (NumberParseException $exception) {
-		$this->errorAction();
+		// Error handling
 	}
 }
 ```
