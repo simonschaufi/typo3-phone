@@ -21,7 +21,7 @@
         "giggsey/libphonenumber-for-php": "^7.0 || ^8.0",
         "league/iso3166": "^2.0",
         "simonschaufi/typo3-support": "*",
-        "typo3/cms-core": "^8.7 || ^9.5 || ^10.4"
+        "typo3/cms-core": "^8.7 || ^9.5 || ^10.4 || ^11.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.16",

@@ -6,6 +6,7 @@
 [![TYPO3](https://img.shields.io/badge/TYPO3-8.7-orange.svg)](https://get.typo3.org/version/8)
 [![TYPO3](https://img.shields.io/badge/TYPO3-9.5-orange.svg)](https://get.typo3.org/version/9)
 [![TYPO3](https://img.shields.io/badge/TYPO3-10.4-orange.svg)](https://get.typo3.org/version/10)
+[![TYPO3](https://img.shields.io/badge/TYPO3-11.0-orange.svg)](https://get.typo3.org/version/11)
 
 Adds phone number functionality to TYPO3 based on the [PHP port](https://github.com/giggsey/libphonenumber-for-php) of [Google's libphonenumber API](https://github.com/googlei18n/libphonenumber) by [giggsey](https://github.com/giggsey).
 
@@ -22,6 +23,7 @@ add the following code in your controller:
 
 ```php
 use SimonSchaufi\TYPO3Phone\Validation\Validator\PhoneValidator;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 public function initializeUpdateAction(): void
 {
@@ -33,8 +35,7 @@ public function initializeUpdateAction(): void
 		$validators->rewind();
 		$validator = $validators->current();
 
-		/* @var \TYPO3\CMS\Extbase\Validation\Validator\GenericObjectValidator $validator */
-		$phoneValidator = $this->validatorResolver->createValidator(PhoneValidator::class, [
+		$phoneValidator = GeneralUtility::makeInstance(PhoneValidator::class, [
 			// If the user enters a number prefixed with "+" then the country can be guessed.
 			// If not, the following countries listed in the array will be checked against
 			'countries' => ['AUTO', 'DE'],
@@ -50,20 +51,13 @@ Alternatively you can instantiate the validator anywhere in your code like this:
 ```php
 use SimonSchaufi\TYPO3Phone\Validation\Validator\PhoneValidator;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Validation\Validator\ValidatorInterface;
-use TYPO3\CMS\Extbase\Validation\ValidatorResolver;
 
-$validatorResolver = GeneralUtility::makeInstance(ValidatorResolver::class);
-$phoneValidator = $validatorResolver->createValidator(PhoneValidator::class, [
+$phoneValidator = GeneralUtility::makeInstance(PhoneValidator::class, [
 	// If the user enters a number prefixed with "+" then the country can be guessed.
 	// If not, the following countries listed in the array will be checked against
 	'countries' => ['AUTO', 'DE'],
 	'types' => ['MOBILE']
 ]);
-
-if (!($phoneValidator instanceof ValidatorInterface)) {
-	throw new \Exception('Could not create phone validator', 1619106647);
-}
 
 $result = $phoneValidator->validate('+3212345678');
 
@@ -86,7 +80,7 @@ If you **don't** want to use the extbase validator and instead a more low level 
 Info: In my case the Address Object has a property "country" that is of type `\SJBR\StaticInfoTables\Domain\Model\Country`
 
 ```php
-use SimonSchaufi\TYPO3Phone\Exception\NumberParseException;
+use SimonSchaufi\TYPO3Phone\Exceptions\NumberParseException;
 use SimonSchaufi\TYPO3Phone\PhoneNumber;
 
 if (!empty($address->getPhone())) {
