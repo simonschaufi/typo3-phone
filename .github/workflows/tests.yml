@@ -9,10 +9,14 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-20.04]
         php: [7.2, 7.3, 7.4]
         # TYPO3 8.7 is not compatible with composer 2
-        typo3: [9.5, 10.4]
+        typo3: ['^9.5', '^10.4']
+        include:
+          - os: ubuntu-20.04
+            php: 7.4
+            typo3: '^11.3'
 
     name: P${{ matrix.php }} - T${{ matrix.typo3 }}
 
@@ -34,7 +38,7 @@ jobs:
           coverage: none
 
       - name: Install dependencies
-        run: composer require "typo3/cms-core:^${{ matrix.typo3 }}" --prefer-dist --no-progress --no-interaction
+        run: composer require "typo3/cms-core:${{ matrix.typo3 }}" --prefer-dist --no-progress --no-interaction
 
       - name: Check PHP syntax errors
         run: find . -name \*.php ! -path "./.Build/*" -print0 | xargs -0 -n1 -P4 php -d display_errors=stderr -n -l > /dev/null
