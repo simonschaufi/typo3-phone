@@ -10,13 +10,12 @@ jobs:
       fail-fast: true
       matrix:
         os: [ubuntu-20.04]
-        php: [7.2, 7.3, 7.4]
-        # TYPO3 8.7 is not compatible with composer 2
-        typo3: ['^9.5', '^10.4']
+        php: [7.4]
+        typo3: ['^10.4', '^11.5']
         include:
           - os: ubuntu-20.04
-            php: 7.4
-            typo3: '^11.3'
+            php: 8.0
+            typo3: '^11.5'
 
     name: P${{ matrix.php }} - T${{ matrix.typo3 }}
 

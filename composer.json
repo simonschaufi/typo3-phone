@@ -16,13 +16,13 @@
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.4 || ^8.0",
         "ext-json": "*",
         "giggsey/libphonenumber-for-php": "^7.0 || ^8.0",
-        "league/iso3166": "^2.0",
+        "league/iso3166": "^2.0 || ^4.0",
         "simonschaufi/typo3-support": "*",
         "symfony/polyfill-php80": "^1.25",
-        "typo3/cms-core": "^8.7 || ^9.5 || ^10.4 || ^11.0"
+        "typo3/cms-core": "^10.4 || ^11.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.7",

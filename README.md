@@ -3,10 +3,8 @@
 [![Latest Stable Version](https://poser.pugx.org/simonschaufi/typo3-phone/v/stable)](https://packagist.org/packages/simonschaufi/typo3-phone)
 [![Total Downloads](https://poser.pugx.org/simonschaufi/typo3-phone/downloads)](https://packagist.org/packages/simonschaufi/typo3-phone)
 [![License](https://poser.pugx.org/simonschaufi/typo3-phone/license)](https://packagist.org/packages/simonschaufi/typo3-phone)
-[![TYPO3](https://img.shields.io/badge/TYPO3-8.7-orange.svg)](https://get.typo3.org/version/8)
-[![TYPO3](https://img.shields.io/badge/TYPO3-9.5-orange.svg)](https://get.typo3.org/version/9)
-[![TYPO3](https://img.shields.io/badge/TYPO3-10.4-orange.svg)](https://get.typo3.org/version/10)
-[![TYPO3](https://img.shields.io/badge/TYPO3-11.0-orange.svg)](https://get.typo3.org/version/11)
+[![TYPO3](https://img.shields.io/badge/TYPO3-10-orange.svg)](https://get.typo3.org/version/10)
+[![TYPO3](https://img.shields.io/badge/TYPO3-11-orange.svg)](https://get.typo3.org/version/11)
 
 Adds phone number functionality to TYPO3 based on the [PHP port](https://github.com/giggsey/libphonenumber-for-php) of [Google's libphonenumber API](https://github.com/googlei18n/libphonenumber) by [giggsey](https://github.com/giggsey).
 
