@@ -19,28 +19,16 @@ declare(strict_types=1);
 
 namespace GertKaaeHansen\TYPO3Phone\Tests\Unit\Validation\Validator;
 
-use Nimut\TestingFramework\MockObject\AccessibleMockObjectInterface;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
-use PHPUnit\Framework\MockObject\MockObject;
 use SimonSchaufi\TYPO3Phone\Exceptions\InvalidParameterException;
 use SimonSchaufi\TYPO3Phone\Validation\Validator\PhoneValidator;
 use TYPO3\CMS\Extbase\Validation\Exception\InvalidValidationOptionsException;
 
 class PhoneValidatorTest extends UnitTestCase
 {
-    /**
-     * @var string
-     */
-    protected $validatorClassName = PhoneValidator::class;
-
-    /**
-     * @param array $options
-     * @param array $mockedMethods
-     * @return AccessibleMockObjectInterface|MockObject|PhoneValidator
-     */
     protected function getValidator(array $options = [], array $mockedMethods = ['translateErrorMessage'])
     {
-        return $this->getAccessibleMock($this->validatorClassName, $mockedMethods, [$options]);
+        return $this->getAccessibleMock(PhoneValidator::class, $mockedMethods, [$options]);
     }
 
     /** @test */
