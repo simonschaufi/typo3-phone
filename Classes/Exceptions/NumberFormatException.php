@@ -23,11 +23,8 @@ class NumberFormatException extends \Exception
 {
     /**
      * Invalid number format static constructor.
-     *
-     * @param string $format
-     * @return static
      */
-    public static function invalid(string $format)
+    public static function invalid(string $format): NumberFormatException
     {
         return new static('Invalid number format "' . $format . '".');
     }

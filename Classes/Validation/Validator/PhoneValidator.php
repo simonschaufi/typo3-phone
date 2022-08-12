@@ -21,7 +21,6 @@ namespace SimonSchaufi\TYPO3Phone\Validation\Validator;
 
 use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumberUtil;
-use ReflectionException;
 use SimonSchaufi\TYPO3Phone\Exceptions\InvalidParameterException;
 use SimonSchaufi\TYPO3Phone\PhoneNumber;
 use SimonSchaufi\TYPO3Phone\Traits\ParsesCountries;
@@ -56,10 +55,6 @@ class PhoneValidator extends AbstractValidator
     ];
 
     /**
-     * PhoneValidator constructor.
-     *
-     * @param array $options
-     *
      * @throws InvalidValidationOptionsException
      */
     public function __construct(array $options = [])
@@ -75,7 +70,6 @@ class PhoneValidator extends AbstractValidator
      * @param mixed $value
      *
      * @return bool
-     * @throws ReflectionException
      * @throws InvalidParameterException
      */
     protected function isValid($value)
@@ -143,9 +137,6 @@ class PhoneValidator extends AbstractValidator
     /**
      * Parse and extract parameters in the appropriate validation arguments.
      *
-     * @param array $parameters
-     *
-     * @return array
      * @throws InvalidParameterException
      */
     protected function extractParameters(array $parameters): array
