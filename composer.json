@@ -39,7 +39,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "GertKaaeHansen\\TYPO3Phone\\Tests\\": "Tests"
+            "SimonSchaufi\\TYPO3Phone\\Tests\\": "Tests"
         }
     },
     "scripts": {

@@ -17,7 +17,7 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace GertKaaeHansen\TYPO3Phone\Tests\Unit\Validation\Validator;
+namespace SimonSchaufi\TYPO3Phone\Tests\Unit\Validation\Validator;
 
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 use SimonSchaufi\TYPO3Phone\Exceptions\InvalidParameterException;

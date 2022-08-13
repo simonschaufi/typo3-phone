@@ -17,7 +17,7 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace GertKaaeHansen\TYPO3Phone\Tests\Unit;
+namespace SimonSchaufi\TYPO3Phone\Tests\Unit;
 
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberType;
