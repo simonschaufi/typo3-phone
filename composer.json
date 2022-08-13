@@ -50,8 +50,10 @@
             "Nimut\\TestingFramework\\Composer\\ExtensionTestEnvironment::prepare"
         ],
         "unit-tests": "TYPO3_PATH_ROOT=$PWD/.Build/public .Build/bin/phpunit --colors=never",
-        "test-php-cs-fixer": ".Build/bin/php-cs-fixer fix -v --dry-run --stop-on-violation",
-        "run-php-cs-fixer": ".Build/bin/php-cs-fixer fix"
+        "dry-run-php-cs-fixer": ".Build/bin/php-cs-fixer fix -v --dry-run --stop-on-violation",
+        "run-php-cs-fixer": ".Build/bin/php-cs-fixer fix",
+        "dry-run-rector": ".Build/bin/rector process --dry-run",
+        "run-rector": ".Build/bin/rector process"
     },
     "config": {
         "bin-dir": ".Build/bin",
