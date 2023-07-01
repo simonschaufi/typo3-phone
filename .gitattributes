@@ -1,5 +1,7 @@
 /.* export-ignore
 /Tests export-ignore
-/phpunit.xml export-ignore
+/Configuration/FunctionalTests.xml export-ignore
+/Configuration/UnitTests.xml export-ignore
+/phpcs.xml export-ignore
 /rector.php export-ignore
 /ruleset.xml export-ignore

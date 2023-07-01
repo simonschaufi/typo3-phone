@@ -1,5 +1,6 @@
 /.Build
 /.idea
+/var
 /.env
 /.env.dist
 /.php-cs-fixer.cache

@@ -20,48 +20,41 @@ declare(strict_types=1);
 namespace SimonSchaufi\TYPO3Phone\Validation\Validator;
 
 use libphonenumber\NumberParseException;
-use libphonenumber\PhoneNumberUtil;
+use SimonSchaufi\TYPO3Phone\Aspects\PhoneNumberCountry;
+use SimonSchaufi\TYPO3Phone\Aspects\PhoneNumberType;
 use SimonSchaufi\TYPO3Phone\Exceptions\InvalidParameterException;
 use SimonSchaufi\TYPO3Phone\PhoneNumber;
-use SimonSchaufi\TYPO3Phone\Traits\ParsesCountries;
-use SimonSchaufi\TYPO3Phone\Traits\ParsesTypes;
-use TYPO3\CMS\Extbase\Validation\Exception\InvalidValidationOptionsException;
 use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 
 class PhoneValidator extends AbstractValidator
 {
-    use ParsesCountries;
-    use ParsesTypes;
-
     /**
-     * @var PhoneNumberUtil
-     */
-    protected $lib;
-
-    /**
+     * This contains the supported options, their default values, descriptions and types.
+     *
      * @var array
      */
     protected $supportedOptions = [
         'countries' => [
             [],
             'Array of countries',
-            'array'
+            'array',
         ],
         'types' => [
             [],
             'Array of phone number types',
-            'array'
+            'array',
+        ],
+        'international' => [
+            false,
+            '',
+            'boolean',
+        ],
+        'lenient' => [
+            false,
+            '',
+            'boolean',
         ],
     ];
-
-    /**
-     * @throws InvalidValidationOptionsException
-     */
-    public function __construct(array $options = [])
-    {
-        parent::__construct($options);
-        $this->lib = PhoneNumberUtil::getInstance();
-    }
 
     /**
      * Check if $value is valid. If it is not valid, needs to add an error
@@ -72,58 +65,41 @@ class PhoneValidator extends AbstractValidator
      * @return bool
      * @throws InvalidParameterException
      */
-    protected function isValid($value)
+    protected function isValid(mixed $value): void
     {
         $parameters = $this->getOptions();
 
-        [
-            $countries,
-            $types,
-            $detect,
-            $lenient
-        ] = $this->extractParameters($parameters);
+        $countries = PhoneNumberCountry::sanitize([
+            ...$parameters['countries'],
+        ]);
 
-        // A "null" country is prepended:
-        // 1. In case of auto-detection to have the validation run first without supplying a country.
-        // 2. In case of lenient validation without provided countries; we still might have some luck...
-        if ($detect || ($lenient && empty($countries))) {
-            array_unshift($countries, null);
-        }
+        $types = PhoneNumberType::sanitize($parameters['types']);
 
-        foreach ($countries as $country) {
-            try {
-                // Parsing the phone number also validates the country, so no need to do this explicitly.
-                // It'll throw a PhoneCountryException upon failure.
-                $phoneNumber = PhoneNumber::make($value, $country);
+        try {
+            $phone = (new PhoneNumber($value, $countries))->lenient($parameters['lenient']);
 
-                // Type validation.
-                if (!empty($types) && !$phoneNumber->isOfType($types)) {
-                    continue;
-                }
-
-                $lenientPhoneNumber = $phoneNumber->lenient()->getPhoneNumberInstance();
-
-                // Lenient validation.
-                if ($lenient && $this->lib->isPossibleNumber($lenientPhoneNumber, $country)) {
-                    return true;
-                }
-
-                $phoneNumberInstance = $phoneNumber->getPhoneNumberInstance();
-
-                // Country detection.
-                if ($detect && $this->lib->isValidNumber($phoneNumberInstance)) {
-                    return true;
-                }
-
-                // Default number+country validation.
-                if ($this->lib->isValidNumberForRegion($phoneNumberInstance, $country)) {
-                    return true;
-                }
-            } catch (NumberParseException $e) {
-                continue;
+            // Is the country within the allowed list (if applicable)?
+            if (!$parameters['international'] && !empty($countries) && !$phone->isOfCountry($countries)) {
+                $this->invalid();
+                return;
             }
-        }
 
+            // Is the type within the allowed list (if applicable)?
+            if (!empty($types) && !$phone->isOfType($types)) {
+                $this->invalid();
+                return;
+            }
+
+            if (!$phone->isValid()) {
+                $this->invalid();
+            }
+        } catch (NumberParseException $e) {
+            $this->invalid();
+        }
+    }
+
+    protected function invalid(): void
+    {
         $this->addError(
             $this->translateErrorMessage(
                 'error_invalid_number_format',
@@ -131,34 +107,5 @@ class PhoneValidator extends AbstractValidator
             ),
             1552843864
         );
-        return false;
-    }
-
-    /**
-     * Parse and extract parameters in the appropriate validation arguments.
-     *
-     * @throws InvalidParameterException
-     */
-    protected function extractParameters(array $parameters): array
-    {
-        $countries = static::parseCountries($parameters['countries']);
-        $types = static::parseTypes($parameters['types']);
-
-        // Force developers to write proper code.
-        // Since the static parsers return a validated array with preserved keys, we can safely diff against the keys.
-        // Unfortunately we can't use $collection->diffKeys() as it's not available yet in earlier 5.* versions.
-        $leftovers = array_diff_key($parameters['countries'], $types, $countries);
-        $leftovers = array_diff($leftovers, ['AUTO', 'LENIENT']);
-
-        if (!empty($leftovers)) {
-            throw InvalidParameterException::parameters($leftovers);
-        }
-
-        return [
-            $countries,
-            $types,
-            in_array('AUTO', $parameters['countries'], true),
-            in_array('LENIENT', $parameters['countries'], true),
-        ];
     }
 }
