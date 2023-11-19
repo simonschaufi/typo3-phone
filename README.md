@@ -1,5 +1,8 @@
 # TYPO3 Phone
 
+[![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://www.paypal.me/simonschaufi/20)
+[![GitHub Sponsors](https://img.shields.io/github/sponsors/simonschaufi?label=GitHub%20Sponsors)](https://github.com/sponsors/simonschaufi)
+[![Buy me a coffee](https://img.shields.io/badge/-Buy_me_a_coffee-gray?logo=buymeacoffee)](https://www.buymeacoffee.com/simonschaufi)
 [![Latest Stable Version](https://poser.pugx.org/simonschaufi/typo3-phone/v/stable)](https://packagist.org/packages/simonschaufi/typo3-phone)
 [![Total Downloads](https://poser.pugx.org/simonschaufi/typo3-phone/downloads)](https://packagist.org/packages/simonschaufi/typo3-phone)
 [![License](https://poser.pugx.org/simonschaufi/typo3-phone/license)](https://packagist.org/packages/simonschaufi/typo3-phone)
