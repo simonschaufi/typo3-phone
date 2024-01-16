@@ -27,7 +27,7 @@ use SimonSchaufi\TYPO3Phone\Exceptions\NumberParseException;
 use SimonSchaufi\TYPO3Phone\PhoneNumber;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-class PhoneNumberTest extends UnitTestCase
+final class PhoneNumberTest extends UnitTestCase
 {
     /** @test */
     public function it_constructs_without_country(): void

@@ -28,7 +28,7 @@ use TYPO3\CMS\Extbase\Error\Result;
 use TYPO3\CMS\Extbase\Validation\Exception\InvalidValidationOptionsException;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 
-class PhoneValidatorTest extends FunctionalTestCase
+final class PhoneValidatorTest extends FunctionalTestCase
 {
     /**
      * @see https://github.com/TYPO3/typo3/blob/fc5e9f7e37dd15d873d949c84cb603e0968ea202/typo3/sysext/extbase/Tests/Functional/Validation/Validator/BooleanValidatorTest.php#L28-L34
@@ -41,14 +41,14 @@ class PhoneValidatorTest extends FunctionalTestCase
         $GLOBALS['TYPO3_REQUEST'] = $request;
     }
 
-    protected function getValidator(array $options = []): PhoneValidator
+    private function getValidator(array $options = []): PhoneValidator
     {
         $validator = new PhoneValidator();
         $validator->setOptions($options);
         return $validator;
     }
 
-    protected function validate(mixed $value, array $options = []): Result
+    private function validate(string $value, array $options = []): Result
     {
         return $this->getValidator($options)->validate($value);
     }
