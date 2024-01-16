@@ -42,7 +42,7 @@ class PhoneNumber implements \JsonSerializable
      */
     protected bool $lenient = false;
 
-    public function __construct(?string $number, $country = [])
+    public function __construct(?string $number, array|string $country = [])
     {
         $this->number = $number;
         $this->countries = Arr::wrap($country);
@@ -58,7 +58,7 @@ class PhoneNumber implements \JsonSerializable
             return PhoneNumberUtil::getInstance()->getRegionCodeForNumber(
                 PhoneNumberUtil::getInstance()->parse($this->number, 'ZZ')
             );
-        } catch (libNumberParseException $e) {
+        } catch (libNumberParseException) {
         }
 
         // Only then iterate over the provided countries.
@@ -67,7 +67,7 @@ class PhoneNumber implements \JsonSerializable
         foreach ($sanitizedCountries as $country) {
             try {
                 $libPhoneObject = PhoneNumberUtil::getInstance()->parse($this->number, $country);
-            } catch (libNumberParseException $e) {
+            } catch (libNumberParseException) {
                 continue;
             }
 
@@ -90,11 +90,11 @@ class PhoneNumber implements \JsonSerializable
     /**
      * Check if the phone number is of (a) given country(ies).
      *
-     * @param string|array $country
+     * @param array|string $country
      *
      * @return bool
      */
-    public function isOfCountry($country): bool
+    public function isOfCountry(array|string $country): bool
     {
         $countries = PhoneNumberCountry::sanitize(Arr::wrap($country));
 
@@ -109,7 +109,7 @@ class PhoneNumber implements \JsonSerializable
      *
      * @throws libNumberParseException
      */
-    public function getType($asValue = false): int|string
+    public function getType(bool $asValue = false): int|string
     {
         $type = PhoneNumberUtil::getInstance()->getNumberType($this->toLibPhoneObject());
 
@@ -119,12 +119,12 @@ class PhoneNumber implements \JsonSerializable
     /**
      * Check if the phone number is of (a) given type(s).
      *
-     * @param string|int $type
+     * @param int|string $type
      *
      * @return bool
      * @throws libNumberParseException
      */
-    public function isOfType($type): bool
+    public function isOfType(int|string $type): bool
     {
         $types = PhoneNumberType::sanitize(Arr::wrap($type));
 
@@ -258,7 +258,7 @@ class PhoneNumber implements \JsonSerializable
                 $this->toLibPhoneObject(),
                 $this->getCountry(),
             );
-        } catch (NumberParseException $e) {
+        } catch (NumberParseException) {
             return false;
         }
     }
@@ -332,7 +332,7 @@ class PhoneNumber implements \JsonSerializable
         // Let's just return the original number in that case.
         try {
             return $this->formatE164();
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return (string)$this->number;
         }
     }
