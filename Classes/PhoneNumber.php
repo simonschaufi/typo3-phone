@@ -42,7 +42,7 @@ class PhoneNumber implements \JsonSerializable
      */
     protected bool $lenient = false;
 
-    public function __construct(?string $number, array|string $country = [])
+    public function __construct(?string $number, array|string|null $country = [])
     {
         $this->number = $number;
         $this->countries = Arr::wrap($country);
