@@ -15,7 +15,7 @@ use Ssch\TYPO3Rector\Set\Typo3LevelSetList;
 return static function (RectorConfig $rectorConfig): void {
     $parameters = $rectorConfig->parameters();
 
-    $rectorConfig->import(Typo3LevelSetList::UP_TO_TYPO3_11);
+    $rectorConfig->import(Typo3LevelSetList::UP_TO_TYPO3_12);
 
     // In order to have a better analysis from phpstan we teach it here some more things
     $rectorConfig->phpstanConfig(Typo3Option::PHPSTAN_FOR_RECTOR_PATH);
@@ -27,7 +27,7 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->disableImportShortClasses();
 
     // Define your target version which you want to support
-    $rectorConfig->phpVersion(PhpVersion::PHP_74);
+    $rectorConfig->phpVersion(PhpVersion::PHP_81);
 
     // If you have an editorconfig and changed files should keep their format enable it here
     $parameters->set(Option::ENABLE_EDITORCONFIG, true);
