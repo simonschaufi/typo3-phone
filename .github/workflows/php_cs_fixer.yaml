@@ -12,7 +12,7 @@ jobs:
     if: github.event.pull_request.draft == false && github.repository == 'simonschaufi/typo3-phone'
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
           # https://github.com/stefanzweifel/git-auto-commit-action#commits-of-this-action-do-not-trigger-new-workflow-runs
