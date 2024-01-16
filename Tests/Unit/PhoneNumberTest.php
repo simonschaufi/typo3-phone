@@ -218,19 +218,17 @@ final class PhoneNumberTest extends UnitTestCase
     }
 
     /** @test */
-    public function it_returns_false_when_checking_incorrect_type_or_null(): void
+    public function it_returns_false_when_checking_incorrect_type(): void
     {
         $object = new PhoneNumber('012345678', 'BE');
         self::assertFalse($object->isOfType('mobile'));
         self::assertFalse($object->isOfType(PhoneNumberType::MOBILE));
         self::assertFalse($object->isOfType('foo'));
-        self::assertFalse($object->isOfType(null));
 
         $object = new PhoneNumber('0470123456', 'BE');
         self::assertFalse($object->isOfType('fixed_line'));
         self::assertFalse($object->isOfType(PhoneNumberType::FIXED_LINE));
         self::assertFalse($object->isOfType('foo'));
-        self::assertFalse($object->isOfType(null));
     }
 
     /** @test */
