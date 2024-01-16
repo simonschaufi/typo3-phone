@@ -89,10 +89,6 @@ class PhoneNumber implements \JsonSerializable
 
     /**
      * Check if the phone number is of (a) given country(ies).
-     *
-     * @param array|string $country
-     *
-     * @return bool
      */
     public function isOfCountry(array|string $country): bool
     {
@@ -119,12 +115,9 @@ class PhoneNumber implements \JsonSerializable
     /**
      * Check if the phone number is of (a) given type(s).
      *
-     * @param int|string $type
-     *
-     * @return bool
      * @throws libNumberParseException
      */
-    public function isOfType(int|string $type): bool
+    public function isOfType(int|string|array $type): bool
     {
         $types = PhoneNumberType::sanitize(Arr::wrap($type));
 
@@ -139,9 +132,6 @@ class PhoneNumber implements \JsonSerializable
     /**
      * Format the phone number in a given format.
      *
-     * @param string|int $format
-     *
-     * @return string
      * @throws NumberFormatException
      * @throws NumberParseException
      * @throws libNumberParseException
