@@ -20,7 +20,7 @@
         "ext-json": "*",
         "giggsey/libphonenumber-for-php": "^7.0 || ^8.0",
         "league/iso3166": "^2.0 || ^4.0",
-        "simonschaufi/typo3-support": "^1.0",
+        "simonschaufi/typo3-support": "^1.0 || ^2.0 || ^3.0",
         "symfony/polyfill-php80": "^1.25",
         "typo3/cms-core": "^10.4 || ^11.5"
     },
@@ -60,7 +60,8 @@
         "vendor-dir": ".Build/vendor",
         "allow-plugins": {
             "typo3/cms-composer-installers": true,
-            "typo3/class-alias-loader": true
+            "typo3/class-alias-loader": true,
+            "ergebnis/composer-normalize": true
         },
         "sort-packages": true
     },
