@@ -297,7 +297,7 @@ class PhoneNumber implements \JsonSerializable
     {
         try {
             return PhoneNumberUtil::getInstance()->parse($this->number, $this->getCountry());
-        } catch (libNumberParseException $e) {
+        } catch (libNumberParseException) {
             empty($this->countries)
                 ? throw NumberParseException::countryRequired($this->number)
                 : throw NumberParseException::countryMismatch($this->number, $this->countries);
