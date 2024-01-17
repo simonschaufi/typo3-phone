@@ -37,7 +37,7 @@ public function initializeUpdateAction(): void
 		$validators->rewind();
 		$validator = $validators->current();
 
-        /** @var PhoneValidator $phoneValidator */
+		/** @var PhoneValidator $phoneValidator */
 		$phoneValidator = $this->validatorResolver->createValidator(PhoneValidator::class, [
 			// If the user enters a number prefixed with "+" then the country can be guessed.
 			// If not, the following countries listed in the array will be checked against
