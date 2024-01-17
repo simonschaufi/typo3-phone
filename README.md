@@ -31,15 +31,14 @@ use SimonSchaufi\TYPO3Phone\Validation\Validator\PhoneValidator;
 public function initializeUpdateAction(): void
 {
 	if ($this->request->hasArgument('address') && $this->request->getArgument('address')) {
-		/** @var \TYPO3\CMS\Extbase\Validation\ValidatorResolver */
 		$addressValidator = $this->validatorResolver->getBaseValidatorConjunction(Address::class);
 
 		$validators = $addressValidator->getValidators();
 		$validators->rewind();
 		$validator = $validators->current();
 
-		$phoneValidator = new PhoneValidator();
-		$phoneValidator->setOptions([
+        /** @var PhoneValidator $phoneValidator */
+		$phoneValidator = $this->validatorResolver->createValidator(PhoneValidator::class, [
 			// If the user enters a number prefixed with "+" then the country can be guessed.
 			// If not, the following countries listed in the array will be checked against
 			'countries' => ['DE'],
@@ -57,7 +56,7 @@ Alternatively you can instantiate the validator anywhere in your code like this:
 ```php
 use SimonSchaufi\TYPO3Phone\Validation\Validator\PhoneValidator;
 
-$phoneValidator = new PhoneValidator();
+$phoneValidator = GeneralUtility::makeInstance(PhoneValidator::class);
 $phoneValidator->setOptions([
 	// If the user enters a number prefixed with "+" then the country can be guessed.
 	// If not, the following countries listed in the array will be checked against

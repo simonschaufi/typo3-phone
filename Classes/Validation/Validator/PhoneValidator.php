@@ -69,10 +69,7 @@ class PhoneValidator extends AbstractValidator
     {
         $parameters = $this->getOptions();
 
-        $countries = PhoneNumberCountry::sanitize([
-            ...$parameters['countries'],
-        ]);
-
+        $countries = PhoneNumberCountry::sanitize([...$parameters['countries']]);
         $types = PhoneNumberType::sanitize($parameters['types']);
 
         try {

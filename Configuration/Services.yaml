@@ -1,0 +1,11 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  SimonSchaufi\TYPO3Phone\:
+    resource: '../Classes/*'
+    exclude:
+      - '../Classes/Domain/{Aspects,Exceptions}/*'
+      - '../Classes/PhoneNumber.php'
