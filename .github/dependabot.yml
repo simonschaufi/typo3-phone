@@ -6,7 +6,8 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    milestone: 12
+    commit-message:
+      prefix: "[TASK] "
 
   - package-ecosystem: "composer"
     directory: "/"
@@ -17,9 +18,11 @@ updates:
     ignore:
       - dependency-name: "doctrine/dbal"
       - dependency-name: "phpunit/phpunit"
+        versions: [ "^11.0" ]
       - dependency-name: "symfony/console"
       - dependency-name: "symfony/translation"
       - dependency-name: "symfony/yaml"
       - dependency-name: "typo3/cms-*"
     versioning-strategy: "increase"
-    milestone: 12
+    commit-message:
+      prefix: "[TASK] "
