@@ -32,7 +32,7 @@
         "symfony/translation": "^5.4 || ^6.4 || ^7.0",
         "symfony/yaml": "^5.3.6 || ^6.4.0",
         "typo3/coding-standards": "^0.7.1",
-        "typo3/testing-framework": "^8.0.8"
+        "typo3/testing-framework": "^8.0.9"
     },
     "autoload": {
         "psr-4": {
