@@ -23,7 +23,7 @@
         "typo3/cms-core": "^12.4"
     },
     "require-dev": {
-        "ergebnis/composer-normalize": "^2.41.1",
+        "ergebnis/composer-normalize": "^2.42.0",
         "friendsofphp/php-cs-fixer": "^3.49.0",
         "phpunit/phpunit": "^10.5",
         "roave/security-advisories": "dev-latest",
