@@ -9,7 +9,7 @@
 [![License](https://poser.pugx.org/simonschaufi/typo3-phone/license)](https://packagist.org/packages/simonschaufi/typo3-phone)
 [![TYPO3](https://img.shields.io/badge/TYPO3-12-orange.svg)](https://get.typo3.org/version/12)
 
-Adds phone number functionality to Laravel based on the [PHP port](https://github.com/giggsey/libphonenumber-for-php)
+Adds phone number functionality to TYPO3 based on the [PHP port](https://github.com/giggsey/libphonenumber-for-php)
 of [libphonenumber by Google](https://github.com/googlei18n/libphonenumber).
 
 ## Installation
