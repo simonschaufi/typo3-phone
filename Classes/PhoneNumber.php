@@ -385,7 +385,7 @@ class PhoneNumber implements JsonSerializable, Serializable
      * @throws NumberFormatException
      * @throws libNumberParseException
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): string
     {
         return $this->formatE164();
     }
