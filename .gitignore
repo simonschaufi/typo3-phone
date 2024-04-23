@@ -5,4 +5,4 @@
 /.php-cs-fixer.cache
 /.phpunit.result.cache
 /composer.lock
-/release.sh
+/release*.sh
