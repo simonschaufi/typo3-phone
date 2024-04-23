@@ -297,11 +297,11 @@ class PhoneNumber implements \JsonSerializable
     /**
      * Convert the phone instance into something JSON serializable.
      *
-     * @return string
+     * @return mixed
      * @throws NumberFormatException
      * @throws libNumberParseException
      */
-    public function jsonSerialize(): string
+    public function jsonSerialize(): mixed
     {
         return $this->formatE164();
     }
