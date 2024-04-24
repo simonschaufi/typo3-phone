@@ -19,14 +19,11 @@ declare(strict_types=1);
 
 namespace SimonSchaufi\TYPO3Phone;
 
-use Exception;
-use JsonSerializable;
 use libphonenumber\NumberParseException as libNumberParseException;
 use libphonenumber\PhoneNumber as libPhoneNumber;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberType;
 use libphonenumber\PhoneNumberUtil;
-use Serializable;
 use SimonSchaufi\TYPO3Phone\Exceptions\CountryCodeException;
 use SimonSchaufi\TYPO3Phone\Exceptions\NumberFormatException;
 use SimonSchaufi\TYPO3Phone\Exceptions\NumberParseException;
@@ -34,7 +31,10 @@ use SimonSchaufi\TYPO3Phone\Traits\ParsesCountries;
 use SimonSchaufi\TYPO3Phone\Traits\ParsesFormats;
 use SimonSchaufi\TYPO3Phone\Traits\ParsesTypes;
 
-class PhoneNumber implements JsonSerializable, Serializable
+/**
+ * @see https://github.com/Propaganistas/Laravel-Phone/blob/master/src/PhoneNumber.php
+ */
+class PhoneNumber implements \JsonSerializable, \Serializable
 {
     use ParsesCountries;
     use ParsesFormats;
@@ -417,6 +417,16 @@ class PhoneNumber implements JsonSerializable, Serializable
         $this->country = $this->lib->getRegionCodeForNumber($this->getPhoneNumberInstance());
     }
 
+    public function __serialize()
+    {
+        return ['number' => $this->formatE164()];
+    }
+
+    public function __unserialize(array $data)
+    {
+        $this->number = $data['number'];
+    }
+
     /**
      * Convert the phone instance to a formatted number.
      *
@@ -428,7 +438,7 @@ class PhoneNumber implements JsonSerializable, Serializable
         // Let's just return the original number in that case.
         try {
             return $this->formatE164();
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             return (string)$this->number;
         }
     }
