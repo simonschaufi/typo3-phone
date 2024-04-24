@@ -32,7 +32,7 @@ use SimonSchaufi\TYPO3Phone\Traits\ParsesFormats;
 use SimonSchaufi\TYPO3Phone\Traits\ParsesTypes;
 
 /**
- * @see https://github.com/Propaganistas/Laravel-Phone/blob/master/src/PhoneNumber.php
+ * @see https://github.com/Propaganistas/Laravel-Phone/blob/4.x/src/PhoneNumber.php
  */
 class PhoneNumber implements \JsonSerializable, \Serializable
 {
@@ -385,6 +385,7 @@ class PhoneNumber implements \JsonSerializable, \Serializable
      * @throws NumberFormatException
      * @throws libNumberParseException
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize(): string
     {
         return $this->formatE164();
@@ -396,35 +397,52 @@ class PhoneNumber implements \JsonSerializable, \Serializable
      * @return string
      * @throws NumberFormatException
      * @throws libNumberParseException
+     * @deprecated PHP 8.1
      */
     public function serialize()
     {
-        return $this->formatE164();
+        return $this->__serialize()['number'];
     }
 
     /**
      * Reconstructs the phone instance from a string representation.
      *
-     * @param string $serialized
+     * @param string|array $serialized
      *
      * @throws NumberParseException
      * @throws libNumberParseException
+     * @deprecated PHP 8.1
      */
     public function unserialize($serialized)
     {
-        $this->lib = PhoneNumberUtil::getInstance();
-        $this->number = $serialized;
-        $this->country = $this->lib->getRegionCodeForNumber($this->getPhoneNumberInstance());
+        $this->__unserialize(is_array($serialized) ? $serialized : ['number' => $serialized]);
     }
 
+    /**
+     * Convert the phone instance into a string representation.
+     *
+     * @return array
+     * @throws NumberFormatException
+     * @throws NumberParseException
+     * @throws libNumberParseException
+     */
     public function __serialize()
     {
         return ['number' => $this->formatE164()];
     }
 
+    /**
+     * Reconstructs the phone instance from a string representation.
+     *
+     * @param array $data
+     * @throws NumberParseException
+     * @throws libNumberParseException
+     */
     public function __unserialize(array $data)
     {
+        $this->lib = PhoneNumberUtil::getInstance();
         $this->number = $data['number'];
+        $this->country = $this->lib->getRegionCodeForNumber($this->getPhoneNumberInstance());
     }
 
     /**
