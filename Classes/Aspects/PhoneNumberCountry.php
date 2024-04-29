@@ -37,11 +37,7 @@ class PhoneNumberCountry
     public static function sanitize($countries): string|array|null
     {
         $sanitized = Collection::make(is_array($countries) ? $countries : [$countries])
-            ->filter(function ($value) {
-                return static::isValid($value);
-            })->map(function ($value) {
-                return strtoupper($value);
-            })->unique();
+            ->filter(fn($value): bool => static::isValid($value))->map(fn($value): string => strtoupper((string)$value))->unique();
 
         return is_array($countries) ? $sanitized->toArray() : $sanitized->first();
     }

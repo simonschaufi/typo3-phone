@@ -50,14 +50,11 @@ class PhoneNumberType
     public static function sanitize($types): int|array|null
     {
         $sanitized = Collection::make(is_array($types) ? $types : [$types])
-            ->map(function ($format) {
+            ->map(fn($format) =>
                 // If the type equals a constant's name, return its value.
                 // Otherwise just return the value.
-                return Arr::get(static::all(), strtoupper((string)$format), $format);
-            })
-            ->filter(function ($format) {
-                return static::isValid($format);
-            })->unique();
+                Arr::get(static::all(), strtoupper((string)$format), $format))
+            ->filter(fn($format): bool => static::isValid($format))->unique();
 
         return is_array($types) ? $sanitized->toArray() : $sanitized->first();
     }

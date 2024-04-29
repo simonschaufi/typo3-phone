@@ -24,10 +24,17 @@ EOF;
 return (new \PhpCsFixer\Config())
     ->setFinder(
         (new \PhpCsFixer\Finder())
-            ->in('Classes')
-            ->in('Configuration')
-            ->in('Tests')
+            ->ignoreVCSIgnored(true)
+            ->in([
+                __DIR__ . '/../../Classes/',
+                __DIR__ . '/../../Configuration/',
+                __DIR__ . '/../../Tests/',
+            ])
+            // warning: these are relative paths!
+            ->notPath([
+            ])
     )
+    ->setCacheFile('Build/php-cs-fixer/.php-cs-fixer.cache')
     ->setRiskyAllowed(true)
     ->setRules([
         '@DoctrineAnnotation' => true,

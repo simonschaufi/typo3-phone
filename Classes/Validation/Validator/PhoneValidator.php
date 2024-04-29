@@ -60,9 +60,7 @@ class PhoneValidator extends AbstractValidator
      * Check if $value is valid. If it is not valid, needs to add an error
      * to result.
      *
-     * @param mixed $value
      *
-     * @return bool
      * @throws InvalidParameterException
      */
     protected function isValid(mixed $value): void
@@ -90,7 +88,7 @@ class PhoneValidator extends AbstractValidator
             if (!$phone->isValid()) {
                 $this->invalid();
             }
-        } catch (NumberParseException $e) {
+        } catch (NumberParseException) {
             $this->invalid();
         }
     }

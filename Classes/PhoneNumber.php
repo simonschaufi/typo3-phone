@@ -31,10 +31,8 @@ use SimonSchaufi\TYPO3Phone\Exceptions\NumberFormatException;
 use SimonSchaufi\TYPO3Phone\Exceptions\NumberParseException;
 use SimonSchaufi\TYPO3Support\Arr;
 
-class PhoneNumber implements \JsonSerializable
+class PhoneNumber implements \JsonSerializable, \Stringable
 {
-    protected ?string $number;
-
     protected array $countries = [];
 
     /**
@@ -42,9 +40,8 @@ class PhoneNumber implements \JsonSerializable
      */
     protected bool $lenient = false;
 
-    public function __construct(?string $number, array|string|null $country = [])
+    final public function __construct(protected ?string $number, array|string|null $country = [])
     {
-        $this->number = $number;
         $this->countries = Arr::wrap($country);
     }
 
@@ -73,7 +70,7 @@ class PhoneNumber implements \JsonSerializable
 
             if ($this->lenient) {
                 if (PhoneNumberUtil::getInstance()->isPossibleNumber($libPhoneObject, $country)) {
-                    return strtoupper($country);
+                    return strtoupper((string)$country);
                 }
 
                 continue;
@@ -122,7 +119,7 @@ class PhoneNumber implements \JsonSerializable
         $types = PhoneNumberType::sanitize(Arr::wrap($type));
 
         // Add the unsure type when applicable.
-        if (array_intersect([libPhoneNumberType::FIXED_LINE, libPhoneNumberType::MOBILE], $types)) {
+        if (array_intersect([libPhoneNumberType::FIXED_LINE, libPhoneNumberType::MOBILE], $types) !== []) {
             $types[] = libPhoneNumberType::FIXED_LINE_OR_MOBILE;
         }
 
@@ -253,7 +250,7 @@ class PhoneNumber implements \JsonSerializable
         }
     }
 
-    public function lenient($enable = true): static
+    public function lenient(bool $enable = true): self
     {
         $this->lenient = $enable;
 
@@ -268,7 +265,7 @@ class PhoneNumber implements \JsonSerializable
             }
 
             return $this->formatE164() === $number->formatE164();
-        } catch (NumberParseException $e) {
+        } catch (NumberParseException) {
             return false;
         }
     }
@@ -288,7 +285,7 @@ class PhoneNumber implements \JsonSerializable
         try {
             return PhoneNumberUtil::getInstance()->parse($this->number, $this->getCountry());
         } catch (libNumberParseException) {
-            empty($this->countries)
+            $this->countries === []
                 ? throw NumberParseException::countryRequired($this->number)
                 : throw NumberParseException::countryMismatch($this->number, $this->countries);
         }
@@ -297,7 +294,6 @@ class PhoneNumber implements \JsonSerializable
     /**
      * Convert the phone instance into something JSON serializable.
      *
-     * @return mixed
      * @throws NumberFormatException
      * @throws libNumberParseException
      */
@@ -306,20 +302,21 @@ class PhoneNumber implements \JsonSerializable
         return $this->formatE164();
     }
 
-    public function __serialize()
+    public function __serialize(): array
     {
         return ['number' => $this->formatE164()];
     }
 
-    public function __unserialize(array $serialized)
+    public function __unserialize(array $serialized): void
     {
         $this->number = $serialized['number'];
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        // Formatting the phone number could throw an exception, but __toString() doesn't cope well with that.
-        // Let's just return the original number in that case.
+        // Formatting the phone number could throw an exception,
+        // but __toString() doesn't cope well with that.
+        // Let's return the original number in that case.
         try {
             return $this->formatE164();
         } catch (\Exception) {

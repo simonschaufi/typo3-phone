@@ -21,7 +21,7 @@ namespace SimonSchaufi\TYPO3Phone\Exceptions;
 
 use libphonenumber\NumberParseException as libNumberParseException;
 
-class NumberParseException extends libNumberParseException
+final class NumberParseException extends libNumberParseException
 {
     protected ?string $number = '';
 
@@ -39,11 +39,6 @@ class NumberParseException extends libNumberParseException
         return $exception;
     }
 
-    /**
-     * @param string $number
-     * @param array|string $countries
-     * @return static
-     */
     public static function countryMismatch(string $number, array|string $countries): NumberParseException
     {
         $countries = array_filter(is_array($countries) ? $countries : [$countries]);
