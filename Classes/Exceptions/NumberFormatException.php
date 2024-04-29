@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 namespace SimonSchaufi\TYPO3Phone\Exceptions;
 
-class NumberFormatException extends \Exception
+final class NumberFormatException extends \Exception
 {
     /**
      * Invalid number format static constructor.

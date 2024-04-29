@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 namespace SimonSchaufi\TYPO3Phone\Exceptions;
 
-class CountryCodeException extends \Exception
+final class CountryCodeException extends \Exception
 {
     /**
      * Invalid country code static constructor.

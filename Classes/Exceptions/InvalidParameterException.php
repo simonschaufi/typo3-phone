@@ -21,7 +21,7 @@ namespace SimonSchaufi\TYPO3Phone\Exceptions;
 
 use SimonSchaufi\TYPO3Support\Collection;
 
-class InvalidParameterException extends \Exception
+final class InvalidParameterException extends \Exception
 {
     /**
      * Ambiguous parameter static constructor.
@@ -36,7 +36,6 @@ class InvalidParameterException extends \Exception
      * Invalid parameters static constructor.
      *
      * @param array|Collection $parameters
-     * @return static
      */
     public static function parameters($parameters): InvalidParameterException
     {

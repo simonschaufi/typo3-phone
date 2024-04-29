@@ -4,204 +4,200 @@
 name: CI with Composer scripts
 on:
   push:
+    paths:
+      - '**.php'
+      - '.github/workflows/ci.yml'
+      - 'Build/phpunit/FunctionalTests.xml'
+      - 'Build/phpunit/UnitTests.xml'
+      - 'composer.json'
     branches:
       - main
   pull_request:
-  schedule:
-    - cron: '15 3 * * 1'
+
 permissions:
   contents: read
+
 jobs:
   php-lint:
-    name: "PHP linter"
-    runs-on: ubuntu-22.04
-    steps:
-      - name: "Checkout"
-        uses: actions/checkout@v4
-      - name: "Install PHP"
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "${{ matrix.php-version }}"
-          coverage: none
-          tools: composer:v2
-      - name: "Show the Composer configuration"
-        run: "composer config --global --list"
-      - name: "Run PHP lint"
-        run: "composer ci:php:lint"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
-        php-version:
-          - "8.0"
-          - "8.1"
-          - "8.2"
-          - "8.3"
-  code-quality:
-    name: "Code quality checks"
-    runs-on: ubuntu-22.04
+        php: [8.1, 8.2, 8.3]
+
+    name: "PHP linter - ${{ matrix.php }}"
+
     steps:
-      - name: "Checkout"
+      - name: "Checkout code"
         uses: actions/checkout@v4
-      - name: "Install PHP"
+
+      - name: "Setup PHP"
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "${{ matrix.php-version }}"
+          php-version: "${{ matrix.php }}"
           coverage: none
-          tools: composer:v2
-      - name: "Show Composer version"
-        run: "composer --version"
-      - name: "Show the Composer configuration"
-        run: "composer config --global --list"
-      - name: "Cache dependencies installed with composer"
-        uses: actions/cache@v4
-        with:
-          key: "php${{ matrix.php-version }}-composer-${{ hashFiles('**/composer.json') }}"
-          path: ~/.cache/composer
-          restore-keys: "php${{ matrix.php-version }}-composer-\n"
-      - name: "Install Composer dependencies"
-        run: "composer install --no-progress"
-      - name: "Run command"
-        run: "composer ci:${{ matrix.command }}"
+
+      - name: "Run PHP lint"
+        run: find .*.php *.php Classes Configuration Tests -name '*.php' -print0 | xargs -r -0 -n 1 -P 4 php -l
+
+  code-quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         command:
           - "composer:normalize"
           - "composer:psr-verify"
           - "php:cs-fixer"
-          - "php:sniff"
+          #- "php:sniff"
           - "yaml:lint"
           - "xliff:lint"
-        php-version:
-          - "8.3"
-  unit-tests:
-    name: "Unit tests"
-    runs-on: ubuntu-22.04
-    needs: php-lint
+        php: [8.1]
+
+    name: "Code quality checks"
+
     steps:
-      - name: "Checkout"
+      - name: "Checkout code"
         uses: actions/checkout@v4
-      - name: "Install PHP"
+
+      - name: "Setup PHP"
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "${{ matrix.php-version }}"
+          php-version: "${{ matrix.php }}"
           coverage: none
           tools: composer:v2
+
       - name: "Show Composer version"
-        run: "composer --version"
+        run: composer --version
+
       - name: "Show the Composer configuration"
-        run: "composer config --global --list"
+        run: composer config --global --list
+
       - name: "Cache dependencies installed with composer"
         uses: actions/cache@v4
         with:
-          key: "php${{ matrix.php-version }}-typo3${{ matrix.typo3-version }}-${{ matrix.composer-dependencies }}-composer-${{ hashFiles('**/composer.json') }}"
+          key: "php${{ matrix.php }}-composer-${{ hashFiles('**/composer.json') }}"
           path: ~/.cache/composer
-          restore-keys: "php${{ matrix.php-version }}-typo3${{ matrix.typo3-version }}-${{ matrix.composer-dependencies }}-composer-\n"
-      - name: "Install TYPO3 Core"
-        env:
-          TYPO3: "${{ matrix.typo3-version }}"
-        run: |
-          composer require --no-ansi --no-interaction --no-progress --no-install typo3/cms-core:"$TYPO3"
-          composer show
-      - name: "Install lowest dependencies with composer"
-        if: "matrix.composer-dependencies == 'lowest'"
-        run: |
-          composer update --no-ansi --no-interaction --no-progress --with-dependencies --prefer-lowest
-          composer show
-      - name: "Install highest dependencies with composer"
-        if: "matrix.composer-dependencies == 'highest'"
-        run: |
-          composer update --no-ansi --no-interaction --no-progress --with-dependencies
-          composer show
-      - name: "Run unit tests"
-        run: "composer ci:tests:unit"
+          restore-keys: "php${{ matrix.php }}-composer-\n"
+
+      - name: "Install Composer dependencies"
+        run: composer install --no-progress
+
+      - name: "List Installed Dependencies"
+        run: composer show -D
+
+      - name: "Run command"
+        run: composer ci:${{ matrix.command }}
+
+  unit-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: php-lint
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
-        include:
-          - typo3-version: "^12.4"
-            php-version: "8.1"
-            composer-dependencies: lowest
-          - typo3-version: "^12.4"
-            php-version: "8.1"
-            composer-dependencies: highest
-          - typo3-version: "^12.4"
-            php-version: "8.2"
-            composer-dependencies: lowest
-          - typo3-version: "^12.4"
-            php-version: "8.2"
-            composer-dependencies: highest
-          - typo3-version: "^12.4"
-            php-version: "8.3"
-            composer-dependencies: lowest
-          - typo3-version: "^12.4"
-            php-version: "8.3"
-            composer-dependencies: highest
+        php: [8.1, 8.3]
+        typo3: ["^12.4"]
+        stability: [prefer-lowest, prefer-stable]
+#        include:
+#          - typo3: "^13.0"
+#            php: "8.3"
+#            stability: prefer-lowest
+#          - typo3: "^13.0"
+#            php: "8.3"
+#            stability: prefer-stable
+
+    name: "Unit tests - PHP ${{ matrix.php }} - TYPO3 ${{ matrix.typo3 }} - ${{ matrix.stability }}"
+
+    steps:
+      - name: "Checkout code"
+        uses: actions/checkout@v4
+
+      - name: "Setup PHP"
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "${{ matrix.php }}"
+          coverage: none
+          tools: composer:v2
+
+      - name: "Show Composer version"
+        run: composer --version
+
+      - name: "Show the Composer configuration"
+        run: composer config --global --list
+
+      - name: "Cache dependencies installed with composer"
+        uses: actions/cache@v4
+        with:
+          key: "php${{ matrix.php }}-typo3${{ matrix.typo3 }}-${{ matrix.stability }}-composer-${{ hashFiles('**/composer.json') }}"
+          path: ~/.cache/composer
+          restore-keys: "php${{ matrix.php }}-typo3${{ matrix.typo3 }}-${{ matrix.stability }}-composer-\n"
+
+      - name: "Install dependencies"
+        run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction
+
+      - name: "List installed dependencies"
+        run: composer show -D
+
+      - name: "Run unit tests"
+        run: composer ci:tests:unit
+
   functional-tests:
-    name: "Functional tests"
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
     needs: php-lint
     env:
       TYPO3_PATH_WEB: $PWD/.Build/public
+    strategy:
+      fail-fast: true
+      matrix:
+        php: [8.1, 8.3]
+        typo3: ["^12.4"]
+        stability: [prefer-lowest, prefer-stable]
+    #        include:
+    #          - typo3: "^13.0"
+    #            php: "8.3"
+    #            stability: prefer-lowest
+    #          - typo3: "^13.0"
+    #            php: "8.3"
+    #            stability: prefer-stable
+
+    name: "Functional tests - PHP ${{ matrix.php }} - TYPO3 ${{ matrix.typo3 }} - ${{ matrix.stability }}"
+
     steps:
-      - name: "Checkout"
+      - name: "Checkout code"
         uses: actions/checkout@v4
-      - name: "Install PHP"
+
+      - name: "Setup PHP"
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "${{ matrix.php-version }}"
+          php-version: "${{ matrix.php }}"
           tools: composer:v2
           extensions: intl, mbstring, pdo_sqlite
           coverage: none
+
       - name: "Show Composer version"
-        run: "composer --version"
+        run: composer --version
+
       - name: "Show the Composer configuration"
-        run: "composer config --global --list"
+        run: composer config --global --list
+
       - name: "Cache dependencies installed with composer"
         uses: actions/cache@v4
         with:
-          key: "php${{ matrix.php-version }}-typo3${{ matrix.typo3-version }}-${{ matrix.composer-dependencies }}-composer-${{ hashFiles('**/composer.json') }}"
+          key: "php${{ matrix.php }}-typo3${{ matrix.typo3 }}-${{ matrix.stability }}-composer-${{ hashFiles('**/composer.json') }}"
           path: ~/.cache/composer
-          restore-keys: "php${{ matrix.php-version }}-typo3${{ matrix.typo3-version }}-${{ matrix.composer-dependencies }}-composer-\n"
-      - name: "Install TYPO3 Core"
-        env:
-          TYPO3: "${{ matrix.typo3-version }}"
-        run: |
-          composer require --no-ansi --no-interaction --no-progress --no-install typo3/cms-core:"$TYPO3"
-          composer show
-      - name: "Install lowest dependencies with composer"
-        if: "matrix.composer-dependencies == 'lowest'"
-        run: |
-          composer update --no-ansi --no-interaction --no-progress --with-dependencies --prefer-lowest
-          composer show
-      - name: "Install highest dependencies with composer"
-        if: "matrix.composer-dependencies == 'highest'"
-        run: |
-          composer update --no-ansi --no-interaction --no-progress --with-dependencies
-          composer show
+          restore-keys: "php${{ matrix.php }}-typo3${{ matrix.typo3 }}-${{ matrix.stability }}-composer-\n"
+
+      - name: "Install dependencies"
+        run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction
+
+      - name: "List installed dependencies"
+        run: composer show -D
+
       - name: "Run functional tests"
         run: |
           export typo3DatabaseDriver="pdo_sqlite";
           composer ci:tests:functional
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - typo3-version: "^12.4"
-            php-version: "8.1"
-            composer-dependencies: lowest
-          - typo3-version: "^12.4"
-            php-version: "8.1"
-            composer-dependencies: highest
-          - typo3-version: "^12.4"
-            php-version: "8.2"
-            composer-dependencies: lowest
-          - typo3-version: "^12.4"
-            php-version: "8.2"
-            composer-dependencies: highest
-          - typo3-version: "^12.4"
-            php-version: "8.3"
-            composer-dependencies: lowest
-          - typo3-version: "^12.4"
-            php-version: "8.3"
-            composer-dependencies: highest

@@ -16,7 +16,7 @@
         }
     ],
     "require": {
-        "php": "^8.1",
+        "php": "~8.1.0 || ~8.2.0 || ~8.3.0",
         "ext-json": "*",
         "giggsey/libphonenumber-for-php": "^8.13",
         "simonschaufi/typo3-support": "^2.0 || ^3.0",
@@ -25,15 +25,21 @@
     "require-dev": {
         "ergebnis/composer-normalize": "^2.42.0",
         "friendsofphp/php-cs-fixer": "^3.54.0",
-        "phpunit/phpunit": "^10.5",
+        "friendsoftypo3/phpstan-typo3": "^0.9.0",
+        "phpstan/phpstan": "^1.10.67",
+        "phpstan/phpstan-phpunit": "^1.3.16",
+        "phpunit/phpunit": "^10.5.20",
         "roave/security-advisories": "dev-latest",
-        "squizlabs/php_codesniffer": "^3.9",
-        "symfony/console": "^5.4 || ^6.4",
+        "squizlabs/php_codesniffer": "^3.9.2",
+        "ssch/typo3-rector": "^2.5.0",
+        "symfony/console": "^5.4 || ^6.4 || ^7.0",
         "symfony/translation": "^5.4 || ^6.4 || ^7.0",
-        "symfony/yaml": "^5.3.6 || ^6.4.0",
+        "symfony/yaml": "^5.4 || ^6.4 || ^7.0",
         "typo3/coding-standards": "^0.7.1",
         "typo3/testing-framework": "^8.0.9"
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "SimonSchaufi\\TYPO3Phone\\": "Classes"
@@ -64,63 +70,48 @@
     "scripts": {
         "ci:composer:normalize": "@composer normalize --no-check-lock --dry-run",
         "ci:composer:psr-verify": "@composer dumpautoload --optimize --strict-psr --no-plugins",
-        "ci:coverage": [
-            "@ci:coverage:unit",
-            "@ci:coverage:functional"
-        ],
-        "ci:coverage:functional": [
-            "@ci:tests:create-directories",
-            "@coverage:create-directories",
-            ".Build/bin/phpunit -c ./Configuration/FunctionalTests.xml --whitelist Classes --coverage-php=.Build/coverage/functional.cov Tests/Functional"
-        ],
-        "ci:coverage:merge": [
-            "@coverage:create-directories",
-            "@php tools/phpcov merge --clover=./.Build/logs/clover.xml ./.Build/coverage/"
-        ],
-        "ci:coverage:unit": [
-            "@coverage:create-directories",
-            ".Build/bin/phpunit -c ./Configuration/UnitTests.xml --whitelist Classes --coverage-php=.Build/coverage/unit.cov Tests/Unit"
-        ],
-        "ci:php": [
-            "@ci:php:cs-fixer",
-            "@ci:php:lint",
-            "@ci:php:sniff",
-            "@ci:php:stan"
-        ],
-        "ci:php:cs-fixer": "php-cs-fixer fix --config .php-cs-fixer.php -v --dry-run --diff --stop-on-violation",
-        "ci:php:lint": "find .*.php *.php Classes Configuration Tests -name '*.php' -print0 | xargs -r -0 -n 1 -P 4 php -l",
-        "ci:php:sniff": "phpcs Classes Configuration Tests",
-        "ci:rector": ".Build/bin/rector process --dry-run",
-        "ci:static": [
-            "@ci:composer:normalize",
-            "@ci:php:cs-fixer",
-            "@ci:php:lint",
-            "@ci:php:sniff",
-            "@ci:yaml:lint"
-        ],
+        "ci:php:cs-fixer": ".Build/bin/php-cs-fixer fix --config Build/php-cs-fixer/config.php -v --dry-run --diff --stop-on-violation",
+        "ci:php:sniff": ".Build/bin/phpcs Classes Configuration Tests",
+        "ci:php:stan": ".Build/bin/phpstan analyse -c Build/phpstan/phpstan.neon --no-progress --no-interaction --memory-limit 4G",
+        "ci:rector": ".Build/bin/rector process --config Build/rector/rector.php --dry-run",
         "ci:tests:create-directories": "mkdir -p .Build/public/typo3temp/var/tests",
         "ci:tests:functional": [
             "@ci:tests:create-directories",
-            "find 'Tests/Functional' -wholename '*Test.php' | parallel --gnu 'echo; echo \"Running functional test suite {}\"; .Build/bin/phpunit -c ./Configuration/FunctionalTests.xml {}';"
+            "find 'Tests/Functional' -wholename '*Test.php' | parallel --gnu 'echo; echo \"Running functional test suite {}\"; .Build/bin/phpunit -c Build/phpunit/FunctionalTests.xml {}';"
         ],
-        "ci:tests:unit": ".Build/bin/phpunit -c ./Configuration/UnitTests.xml Tests/Unit",
+        "ci:tests:unit": ".Build/bin/phpunit -c Build/phpunit/UnitTests.xml",
         "ci:xliff:lint": "php Build/bin/console lint:xliff Resources/Private/Language",
         "ci:yaml:lint": "find . ! -path '*.Build/*' ! -path '*node_modules/*' -regextype egrep -regex '.*.ya?ml$' | xargs -r php ./.Build/bin/yaml-lint",
-        "coverage:create-directories": "mkdir -p .Build/logs .Build/coverage",
         "fix:composer:normalize": "@composer normalize --no-check-lock",
-        "fix:php": [
-            "@fix:php:cs",
-            "@fix:php:sniff"
-        ],
-        "fix:php:cs": "php-cs-fixer fix --config .php-cs-fixer.php",
-        "fix:php:sniff": "phpcbf Classes Configuration Tests",
-        "fix:rector": ".Build/bin/rector process",
-        "local:functional-tests": "TYPO3_PATH_ROOT=$PWD/.Build/public typo3DatabaseDriver=pdo_sqlite .Build/bin/phpunit --colors -c ./Configuration/FunctionalTests.xml --stop-on-failure Tests/Functional",
-        "local:test": [
-            "@dry-run-php-cs-fixer",
-            "@unit-tests",
-            "@functional-tests"
-        ],
-        "local:unit-tests": "TYPO3_PATH_ROOT=$PWD/.Build/public .Build/bin/phpunit --colors -c ./Configuration/UnitTests.xml --stop-on-failure Tests/Unit/"
+        "fix:php:cs": ".Build/bin/php-cs-fixer fix --config Build/php-cs-fixer/config.php",
+        "fix:php:sniff": ".Build/bin/phpcbf Classes Configuration Tests",
+        "fix:rector": ".Build/bin/rector process --config Build/rector/rector.php",
+        "local:functional-tests": "TYPO3_PATH_ROOT=$PWD/.Build/public .Build/bin/phpunit --colors -c Build/phpunit/FunctionalTests.xml --stop-on-failure",
+        "local:test-php-cs-fixer": ".Build/bin/php-cs-fixer fix -v --dry-run --stop-on-violation",
+        "local:test-typoscript-lint": ".Build/bin/typoscript-lint -c .typoscript-lint.yml",
+        "local:unit-tests": ".Build/bin/phpunit --colors -c Build/phpunit/UnitTests.xml --stop-on-failure",
+        "phpstan:baseline": ".Build/bin/phpstan analyse -c Build/phpstan/phpstan.neon --no-progress --no-interaction --memory-limit 4G --generate-baseline=Build/phpstan/phpstan-baseline.neon --allow-empty-baseline",
+        "test": [
+            "@local:test-php-cs-fixer",
+            "@local:test-typoscript-lint",
+            "@local:unit-tests",
+            "@local:functional-tests"
+        ]
+    },
+    "scripts-descriptions": {
+        "ci:composer:normalize": "Checks the composer.json.",
+        "ci:composer:psr-verify": "Verifies PSR-4 namespace correctness.",
+        "ci:php:cs-fixer": "Checks the code style with the PHP Coding Standards Fixer (PHP-CS-Fixer).",
+        "ci:php:sniff": "Checks the code style with PHP_CodeSniffer (PHPCS).",
+        "ci:tests:create-directories": "Creates the directories required to smoothely run the functional tests.",
+        "ci:tests:functional": "Runs the functional tests.",
+        "ci:tests:unit": "Runs the unit tests.",
+        "ci:typoscript:lint": "Lints the TypoScript files.",
+        "ci:xliff:lint": "Lints the XLIFF files.",
+        "ci:yaml:lint": "Lints the YAML files.",
+        "docs:generate": "Renders the extension ReST documentation.",
+        "fix:composer:normalize": "Normalizes composer.json file content.",
+        "fix:php:cs": "Fixes the code style with PHP-CS-Fixer.",
+        "fix:php:sniff": "Fixes the code style with PHP_CodeSniffer."
     }
 }
