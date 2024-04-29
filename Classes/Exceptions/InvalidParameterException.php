@@ -28,7 +28,7 @@ final class InvalidParameterException extends \Exception
      */
     public static function ambiguous(string $parameter): InvalidParameterException
     {
-        return new static('Ambiguous phone validation parameter: "' . $parameter
+        return new self('Ambiguous phone validation parameter: "' . $parameter
             . '". This parameter is recognized as an input field and as a phone type. Please rename the input field.');
     }
 
@@ -41,6 +41,6 @@ final class InvalidParameterException extends \Exception
     {
         $parameters = Collection::make($parameters);
 
-        return new static('Invalid phone validation parameters: "' . $parameters->implode(',') . '".');
+        return new self('Invalid phone validation parameters: "' . $parameters->implode(',') . '".');
     }
 }

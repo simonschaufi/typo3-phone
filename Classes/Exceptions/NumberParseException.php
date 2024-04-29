@@ -23,13 +23,13 @@ use libphonenumber\NumberParseException as libNumberParseException;
 
 final class NumberParseException extends libNumberParseException
 {
-    protected ?string $number = '';
+    private ?string $number = '';
 
-    protected array $countries = [];
+    private array $countries = [];
 
     public static function countryRequired(?string $number): NumberParseException
     {
-        $exception = new static(
+        $exception = new self(
             libNumberParseException::INVALID_COUNTRY_CODE,
             'Number requires a country to be specified.'
         );
@@ -43,7 +43,7 @@ final class NumberParseException extends libNumberParseException
     {
         $countries = array_filter(is_array($countries) ? $countries : [$countries]);
 
-        $exception = new static(
+        $exception = new self(
             libNumberParseException::INVALID_COUNTRY_CODE,
             'Number does not match the provided ' . (count($countries) === 1 ? 'country' : 'countries') . '.'
         );

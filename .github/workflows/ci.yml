@@ -52,6 +52,7 @@ jobs:
           - "composer:psr-verify"
           - "php:cs-fixer"
           #- "php:sniff"
+          - "php:rector"
           - "yaml:lint"
           - "xliff:lint"
         php: [8.1]
