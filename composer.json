@@ -35,7 +35,7 @@
         "symfony/console": "^5.4 || ^6.4 || ^7.0",
         "symfony/translation": "^5.4 || ^6.4 || ^7.0",
         "symfony/yaml": "^5.4 || ^6.4 || ^7.0",
-        "typo3/testing-framework": "^8.0.9"
+        "typo3/testing-framework": "^8.2.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
