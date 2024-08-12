@@ -26,7 +26,7 @@
         "ergebnis/composer-normalize": "^2.43.0",
         "friendsofphp/php-cs-fixer": "^3.62.0",
         "friendsoftypo3/phpstan-typo3": "^0.9.0",
-        "phpstan/phpstan": "^1.11.9",
+        "phpstan/phpstan": "^1.11.10",
         "phpstan/phpstan-phpunit": "^1.4.0",
         "phpunit/phpunit": "^10.5.29",
         "roave/security-advisories": "dev-latest",
