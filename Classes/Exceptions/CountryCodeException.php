@@ -24,7 +24,7 @@ final class CountryCodeException extends \Exception
     /**
      * Invalid country code static constructor.
      */
-    public static function invalid(string $country): CountryCodeException
+    public static function invalid(string $country): self
     {
         return new self('Invalid country code "' . $country . '".');
     }

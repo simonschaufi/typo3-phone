@@ -32,12 +32,12 @@ class PhoneNumberType
 
     public static function isValid($type): bool
     {
-        return ! is_null($type) && in_array($type, static::all(), true);
+        return $type !== null && in_array($type, static::all(), true);
     }
 
     public static function isValidName($type): bool
     {
-        return ! is_null($type) && array_key_exists($type, static::all());
+        return $type !== null && array_key_exists($type, static::all());
     }
 
     public static function getHumanReadableName($type): string|null
@@ -50,11 +50,11 @@ class PhoneNumberType
     public static function sanitize($types): int|array|null
     {
         $sanitized = Collection::make(is_array($types) ? $types : [$types])
-            ->map(fn($format) =>
+            ->map(fn ($format)
                 // If the type equals a constant's name, return its value.
                 // Otherwise just return the value.
-                Arr::get(static::all(), strtoupper((string)$format), $format))
-            ->filter(fn($format): bool => static::isValid($format))->unique();
+                => Arr::get(static::all(), strtoupper((string)$format), $format))
+            ->filter(fn ($format): bool => static::isValid($format))->unique();
 
         return is_array($types) ? $sanitized->toArray() : $sanitized->first();
     }

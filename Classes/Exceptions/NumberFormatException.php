@@ -24,7 +24,7 @@ final class NumberFormatException extends \Exception
     /**
      * Invalid number format static constructor.
      */
-    public static function invalid(string $format): NumberFormatException
+    public static function invalid(string $format): self
     {
         return new self('Invalid number format "' . $format . '".');
     }

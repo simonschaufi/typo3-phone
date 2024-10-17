@@ -40,8 +40,10 @@ class PhoneNumber implements \JsonSerializable, \Stringable
      */
     protected bool $lenient = false;
 
-    final public function __construct(protected ?string $number, array|string|null $country = [])
-    {
+    final public function __construct(
+        protected ?string $number,
+        array|string|null $country = []
+    ) {
         $this->countries = Arr::wrap($country);
     }
 
@@ -76,7 +78,9 @@ class PhoneNumber implements \JsonSerializable, \Stringable
                 continue;
             }
 
-            if (PhoneNumberUtil::getInstance()->isValidNumberForRegion($libPhoneObject, $country)) {
+            if (($libPhoneObject instanceof \libphonenumber\PhoneNumber)
+                && PhoneNumberUtil::getInstance()->isValidNumberForRegion($libPhoneObject, $country)
+            ) {
                 return PhoneNumberUtil::getInstance()->getRegionCodeForNumber($libPhoneObject);
             }
         }
@@ -137,7 +141,7 @@ class PhoneNumber implements \JsonSerializable, \Stringable
     {
         $sanitizedFormat = PhoneNumberFormat::sanitize($format);
 
-        if (is_null($sanitizedFormat)) {
+        if ($sanitizedFormat === null) {
             throw NumberFormatException::invalid($format);
         }
 
@@ -304,7 +308,9 @@ class PhoneNumber implements \JsonSerializable, \Stringable
 
     public function __serialize(): array
     {
-        return ['number' => $this->formatE164()];
+        return [
+            'number' => $this->formatE164(),
+        ];
     }
 
     public function __unserialize(array $serialized): void

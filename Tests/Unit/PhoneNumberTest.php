@@ -21,6 +21,7 @@ namespace SimonSchaufi\TYPO3Phone\Tests\Unit;
 
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberType;
+use PHPUnit\Framework\Attributes\Test;
 use SimonSchaufi\TYPO3Phone\Exceptions\CountryCodeException;
 use SimonSchaufi\TYPO3Phone\Exceptions\NumberFormatException;
 use SimonSchaufi\TYPO3Phone\Exceptions\NumberParseException;
@@ -29,42 +30,42 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 final class PhoneNumberTest extends UnitTestCase
 {
-    /** @test */
+    #[Test]
     public function it_constructs_without_country(): void
     {
         $object = new PhoneNumber('012345678');
         self::assertInstanceOf(PhoneNumber::class, $object);
     }
 
-    /** @test */
+    #[Test]
     public function it_constructs_with_string_country(): void
     {
         $object = new PhoneNumber('012345678', 'BE');
         self::assertInstanceOf(PhoneNumber::class, $object);
     }
 
-    /** @test */
+    #[Test]
     public function it_constructs_with_array_country(): void
     {
         $object = new PhoneNumber('012345678', ['BE', 'NL']);
         self::assertInstanceOf(PhoneNumber::class, $object);
     }
 
-    /** @test */
+    #[Test]
     public function it_constructs_with_null_country(): void
     {
         $object = new PhoneNumber('012345678', null);
         self::assertInstanceOf(PhoneNumber::class, $object);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_raw_number(): void
     {
         $object = new PhoneNumber('012 34 56 78');
         self::assertEquals('012 34 56 78', $object->getRawNumber());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_true_when_checking_correct_validity(): void
     {
         $object = new PhoneNumber('+3212345678');
@@ -77,14 +78,14 @@ final class PhoneNumberTest extends UnitTestCase
         self::assertTrue($object->isValid());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_true_when_checking_correct_validity_with_wrong_country(): void
     {
         $object = new PhoneNumber('+3212345678', 'US');
         self::assertTrue($object->isValid());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_false_when_checking_incorrect_validity(): void
     {
         $object = new PhoneNumber('012345678');
@@ -100,35 +101,35 @@ final class PhoneNumberTest extends UnitTestCase
         self::assertFalse($object->isValid());
     }
 
-    /** @test */
+    #[Test]
     public function it_gets_the_country_for_an_international_number(): void
     {
         $object = new PhoneNumber('+3212345678');
         self::assertEquals('BE', $object->getCountry());
     }
 
-    /** @test */
+    #[Test]
     public function it_gets_the_country_for_a_non_international_number(): void
     {
         $object = new PhoneNumber('012345678', ['NL', 'BE', 'FR']);
         self::assertEquals('BE', $object->getCountry());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_null_when_country_is_not_found_for_a_non_international_number(): void
     {
         $object = new PhoneNumber('012345678', ['NL', 'FR']);
         self::assertNull($object->getCountry());
     }
 
-    /** @test */
+    #[Test]
     public function it_ignores_invalid_countries(): void
     {
         $object = new PhoneNumber('012345678', ['BE', 'foo', 23]);
         self::assertEquals('BE', $object->getCountry());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_true_when_checking_correct_country(): void
     {
         $object = new PhoneNumber('012345678');
@@ -138,7 +139,7 @@ final class PhoneNumberTest extends UnitTestCase
         self::assertTrue($object->isOfCountry('BE'));
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_false_when_checking_incorrect_country_or_null(): void
     {
         $object = new PhoneNumber('012345678');
@@ -148,7 +149,7 @@ final class PhoneNumberTest extends UnitTestCase
         self::assertFalse($object->isOfCountry('US'));
     }
 
-    /** @test */
+    #[Test]
     public function it_ignores_provided_countries_when_checking_country(): void
     {
         $object = new PhoneNumber('012345678', 'NL');
@@ -158,7 +159,7 @@ final class PhoneNumberTest extends UnitTestCase
         self::assertFalse($object->isOfCountry('US'));
     }
 
-    /** @test */
+    #[Test]
     public function it_checks_libphonenumber_specific_regions_as_country(): void
     {
         $object = new PhoneNumber('+247501234');
@@ -166,14 +167,14 @@ final class PhoneNumberTest extends UnitTestCase
         self::assertFalse($object->isOfCountry('US'));
     }
 
-    /** @test */
+    #[Test]
     public function it_doesnt_throw_for_antarctica(): void
     {
         $object = new PhoneNumber('012345678', ['AQ', 'BE']);
         self::assertEquals('BE', $object->getCountry());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_type(): void
     {
         $object = new PhoneNumber('012345678', 'BE');
@@ -183,7 +184,7 @@ final class PhoneNumberTest extends UnitTestCase
         self::assertEquals('mobile', $object->getType());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_type_value(): void
     {
         $object = new PhoneNumber('012345678', 'BE');
@@ -193,7 +194,7 @@ final class PhoneNumberTest extends UnitTestCase
         self::assertEquals(PhoneNumberType::MOBILE, $object->getType(true));
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_true_when_checking_type_with_correct_name(): void
     {
         $object = new PhoneNumber('012345678', 'BE');
@@ -205,7 +206,7 @@ final class PhoneNumberTest extends UnitTestCase
         self::assertTrue($object->isOfType('mobile'));
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_true_when_checking_type_with_correct_value(): void
     {
         $object = new PhoneNumber('012345678', 'BE');
@@ -217,7 +218,7 @@ final class PhoneNumberTest extends UnitTestCase
         self::assertTrue($object->isOfType(PhoneNumberType::MOBILE));
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_false_when_checking_incorrect_type(): void
     {
         $object = new PhoneNumber('012345678', 'BE');
@@ -231,7 +232,7 @@ final class PhoneNumberTest extends UnitTestCase
         self::assertFalse($object->isOfType('foo'));
     }
 
-    /** @test */
+    #[Test]
     public function it_adds_the_unsure_type_when_checking_fixed_line_or_mobile(): void
     {
         // This number is of type FIXED_LINE_OR_MOBILE.
@@ -241,21 +242,21 @@ final class PhoneNumberTest extends UnitTestCase
         self::assertTrue($object->isOfType('mobile'));
     }
 
-    /** @test */
+    #[Test]
     public function it_formats_with_format_value(): void
     {
         $object = new PhoneNumber('+3212345678');
         self::assertEquals('012 34 56 78', $object->format(PhoneNumberFormat::NATIONAL));
     }
 
-    /** @test */
+    #[Test]
     public function it_formats_with_format_name(): void
     {
         $object = new PhoneNumber('+3212345678');
         self::assertEquals('012 34 56 78', $object->format('national'));
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_an_exception_when_formatting_invalid_numbers(): void
     {
         $object = new PhoneNumber('012345678');
@@ -265,7 +266,7 @@ final class PhoneNumberTest extends UnitTestCase
         $object->format(PhoneNumberFormat::NATIONAL);
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_an_exception_for_invalid_formats(): void
     {
         $object = new PhoneNumber('+3212345678');
@@ -275,7 +276,7 @@ final class PhoneNumberTest extends UnitTestCase
         $object->format('foo');
     }
 
-    /** @test */
+    #[Test]
     public function it_has_an_international_format_shortcut_method(): void
     {
         $object = new PhoneNumber('+3212345678');
@@ -286,7 +287,7 @@ final class PhoneNumberTest extends UnitTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_has_a_national_format_shortcut_method(): void
     {
         $object = new PhoneNumber('+3212345678');
@@ -296,7 +297,7 @@ final class PhoneNumberTest extends UnitTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_has_an_E164_format_shortcut_method(): void
     {
         $object = new PhoneNumber('012345678', 'BE');
@@ -306,7 +307,7 @@ final class PhoneNumberTest extends UnitTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_has_an_RFC3966_format_shortcut_method(): void
     {
         $object = new PhoneNumber('+3212345678');
@@ -316,7 +317,7 @@ final class PhoneNumberTest extends UnitTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_numbers_prefixed_with_something(): void
     {
         $object = new PhoneNumber('BE+3212345678');
@@ -330,7 +331,7 @@ final class PhoneNumberTest extends UnitTestCase
         self::assertEquals('012 34 56 78', $object->format(PhoneNumberFormat::NATIONAL));
     }
 
-    /** @test */
+    #[Test]
     public function it_formats_for_dialing_from_within_a_given_country(): void
     {
         $object = new PhoneNumber('+3212345678');
@@ -339,7 +340,7 @@ final class PhoneNumberTest extends UnitTestCase
         self::assertEquals('011 32 12 34 56 78', $object->formatForCountry('US'));
     }
 
-    /** @test */
+    #[Test]
     public function it_formats_for_dialing_on_mobile_from_within_a_given_country(): void
     {
         $object = new PhoneNumber('012 34 56 78', 'BE');
@@ -348,7 +349,7 @@ final class PhoneNumberTest extends UnitTestCase
         self::assertEquals('+3212345678', $object->formatForMobileDialingInCountry('US'));
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_an_exception_when_an_invalid_country_is_provided_for_formatting_for_dialing(): void
     {
         $object = new PhoneNumber('+3212345678');
@@ -358,7 +359,7 @@ final class PhoneNumberTest extends UnitTestCase
         $object->formatForCountry('foo');
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_an_exception_when_an_invalid_country_is_provided_for_formatting_for_mobile_dialing(): void
     {
         $object = new PhoneNumber('+3212345678');
@@ -368,7 +369,7 @@ final class PhoneNumberTest extends UnitTestCase
         $object->formatForMobileDialingInCountry('foo');
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_an_exception_on_formatting_when_the_country_is_missing(): void
     {
         $object = new PhoneNumber('45678');
@@ -378,7 +379,7 @@ final class PhoneNumberTest extends UnitTestCase
         $object->formatRFC3966();
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_an_exception_on_formatting_when_the_country_is_mismatched(): void
     {
         $object = new PhoneNumber('45678', 'BE');
@@ -388,7 +389,7 @@ final class PhoneNumberTest extends UnitTestCase
         $object->formatRFC3966();
     }
 
-    /** @test */
+    #[Test]
     public function it_handles_serialization(): void
     {
         $object = new PhoneNumber('+3212345678');
@@ -402,14 +403,14 @@ final class PhoneNumberTest extends UnitTestCase
         self::assertEquals('BE', $unserialized->getCountry());
     }
 
-    /** @test */
+    #[Test]
     public function it_casts_to_string(): void
     {
         $object = new PhoneNumber('012 34 56 78', 'BE');
         self::assertEquals($object->formatE164(), (string)$object);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_the_original_number_when_unparsable_number_is_cast_to_string(): void
     {
         $object = new PhoneNumber('45678');
@@ -419,14 +420,14 @@ final class PhoneNumberTest extends UnitTestCase
         self::assertEquals('45678', (string)$object);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_string_when_null_is_cast_to_string(): void
     {
         $object = new PhoneNumber(null);
         self::assertEquals('', (string)$object);
     }
 
-    /** @test */
+    #[Test]
     public function it_gets_the_exceptions_number(): void
     {
         $exception = NumberParseException::countryRequired('12345');
@@ -436,14 +437,14 @@ final class PhoneNumberTest extends UnitTestCase
         self::assertEquals('12345', $exception->getNumber());
     }
 
-    /** @test */
+    #[Test]
     public function it_gets_the_exceptions_countries(): void
     {
         $exception = NumberParseException::countryMismatch('12345', ['BE', 'foo']);
         self::assertEquals(['BE', 'foo'], $exception->getCountries());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_equality(): void
     {
         $object = new PhoneNumber('012345678', ['AQ', 'BE']);
@@ -459,7 +460,7 @@ final class PhoneNumberTest extends UnitTestCase
         self::assertFalse($object->equals(new PhoneNumber('012345679', 'BE')));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_check_inequality(): void
     {
         $object = new PhoneNumber('012345678', ['AQ', 'BE']);
@@ -475,7 +476,7 @@ final class PhoneNumberTest extends UnitTestCase
         self::assertFalse($object->notEquals(new PhoneNumber('012345678', 'BE')));
     }
 
-    /** @test */
+    #[Test]
     public function it_doesnt_throw_for_invalid_numbers_when_checking_equality(): void
     {
         $object = new PhoneNumber('012345678', ['AQ', 'BE']);
@@ -484,7 +485,7 @@ final class PhoneNumberTest extends UnitTestCase
         self::assertFalse($object->equals('012345678', 'NL'));
     }
 
-    /** @test */
+    #[Test]
     public function it_doesnt_throw_for_invalid_numbers_when_checking_inequality(): void
     {
         $object = new PhoneNumber('012345678', ['AQ', 'BE']);

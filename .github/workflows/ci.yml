@@ -1,6 +1,3 @@
----
-# This GitHub Actions workflow uses the same development tools that are also installed locally
-# via Composer or PHIVE and calls them using the Composer scripts.
 name: CI with Composer scripts
 on:
   push:
@@ -24,7 +21,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: [8.1, 8.2, 8.3]
+        php: [8.2, 8.3, 8.4]
 
     name: "PHP linter - ${{ matrix.php }}"
 
@@ -50,12 +47,11 @@ jobs:
         command:
           - "composer:normalize"
           - "composer:psr-verify"
-          - "php:cs-fixer"
-          #- "php:sniff"
+          - "php:ecs"
           - "php:rector"
           - "yaml:lint"
           - "xliff:lint"
-        php: [8.1]
+        php: [8.2]
 
     name: "Code quality checks"
 
@@ -99,8 +95,8 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: [8.1, 8.3]
-        typo3: ["^12.4"]
+        php: [8.2, 8.3, 8.4]
+        typo3: ["^13.4"]
         stability: [prefer-lowest, prefer-stable]
 #        include:
 #          - typo3: "^13.0"
@@ -154,8 +150,8 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: [8.1, 8.3]
-        typo3: ["^12.4"]
+        php: [8.2, 8.3, 8.4]
+        typo3: ["^13.4"]
         stability: [prefer-lowest, prefer-stable]
     #        include:
     #          - typo3: "^13.0"

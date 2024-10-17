@@ -60,7 +60,6 @@ class PhoneValidator extends AbstractValidator
      * Check if $value is valid. If it is not valid, needs to add an error
      * to result.
      *
-     *
      * @throws InvalidParameterException
      */
     protected function isValid(mixed $value): void
@@ -74,18 +73,18 @@ class PhoneValidator extends AbstractValidator
             $phone = (new PhoneNumber($value, $countries))->lenient($parameters['lenient']);
 
             // Is the country within the allowed list (if applicable)?
-            if (!$parameters['international'] && !empty($countries) && !$phone->isOfCountry($countries)) {
+            if (! $parameters['international'] && ! empty($countries) && ! $phone->isOfCountry($countries)) {
                 $this->invalid();
                 return;
             }
 
             // Is the type within the allowed list (if applicable)?
-            if (!empty($types) && !$phone->isOfType($types)) {
+            if (! empty($types) && ! $phone->isOfType($types)) {
                 $this->invalid();
                 return;
             }
 
-            if (!$phone->isValid()) {
+            if (! $phone->isValid()) {
                 $this->invalid();
             }
         } catch (NumberParseException) {
