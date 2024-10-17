@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace SimonSchaufi\TYPO3Phone\Tests\Functional\Validation\Validator;
 
 use libphonenumber\PhoneNumberType;
+use PHPUnit\Framework\Attributes\Test;
 use SimonSchaufi\TYPO3Phone\Validation\Validator\PhoneValidator;
 use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 use TYPO3\CMS\Core\Http\ServerRequest;
@@ -53,7 +54,7 @@ final class PhoneValidatorTest extends FunctionalTestCase
         return $this->getValidator($options)->validate($value);
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_with_explicit_countries(): void
     {
         self::assertFalse($this->validate('012345678', ['countries' => ['BE']])->hasErrors());
@@ -62,7 +63,7 @@ final class PhoneValidatorTest extends FunctionalTestCase
         self::assertTrue($this->validate('012345678', ['countries' => ['DE', 'NL', 'US']])->hasErrors());
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_without_countries(): void
     {
         self::assertFalse($this->validate('+3212345678')->hasErrors());
@@ -70,7 +71,7 @@ final class PhoneValidatorTest extends FunctionalTestCase
         self::assertTrue($this->validate('+321234')->hasErrors());
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_in_international_mode(): void
     {
         self::assertTrue($this->validate('+3212345678', ['countries' => ['NL']])->hasErrors());
@@ -79,7 +80,7 @@ final class PhoneValidatorTest extends FunctionalTestCase
         self::assertFalse($this->validate('012345678', ['countries' => ['BE'], 'international' => true])->hasErrors());
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_an_exception_for_invalid_options_parameters(): void
     {
         $this->expectException(InvalidValidationOptionsException::class);
@@ -87,7 +88,7 @@ final class PhoneValidatorTest extends FunctionalTestCase
         $this->getValidator(['country' => ['BE']])->validate('0470123456');
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_in_lenient_mode(): void
     {
         // Validator with AU area code, lenient off
@@ -125,14 +126,14 @@ final class PhoneValidatorTest extends FunctionalTestCase
         self::assertFalse($this->validate('5550123', ['countries' => ['US'], 'lenient' => true])->hasErrors());
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_type(): void
     {
         self::assertFalse($this->validate('+32470123456', ['types' => [PhoneNumberType::MOBILE]])->hasErrors());
         self::assertTrue($this->validate('+3212345678', ['types' => [PhoneNumberType::MOBILE]])->hasErrors());
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_type_and_explicit_country_combined(): void
     {
         self::assertFalse($this->validate('0470123456', ['countries' => ['BE'], 'types' => [PhoneNumberType::MOBILE]])->hasErrors());
@@ -140,28 +141,28 @@ final class PhoneValidatorTest extends FunctionalTestCase
         self::assertTrue($this->validate('0470123456', ['countries' => ['NL'], 'types' => [PhoneNumberType::MOBILE]])->hasErrors());
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_type_as_string(): void
     {
         self::assertFalse($this->validate('+32470123456', ['types' => ['mobile']])->hasErrors());
         self::assertTrue($this->validate('+3212345678', ['types' => ['mobile']])->hasErrors());
     }
 
-    /** @test */
+    #[Test]
     public function it_accepts_mixed_case_parameters(): void
     {
         self::assertFalse($this->validate('+32470123456', ['types' => ['mObIlE']])->hasErrors());
         self::assertFalse($this->validate('0470123456', ['countries' => ['bE']])->hasErrors());
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_explicit_lowercase_countries(): void
     {
         self::assertFalse($this->validate('0470123456', ['countries' => ['be']])->hasErrors());
         self::assertTrue($this->validate('0470123456', ['countries' => ['us']])->hasErrors());
     }
 
-    /** @test */
+    #[Test]
     public function it_validates_libphonenumber_specific_regions_as_country(): void
     {
         self::assertFalse($this->validate('+247501234', ['countries' => ['AC']])->hasErrors());

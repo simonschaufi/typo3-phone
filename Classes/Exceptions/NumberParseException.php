@@ -27,7 +27,7 @@ final class NumberParseException extends libNumberParseException
 
     private array $countries = [];
 
-    public static function countryRequired(?string $number): NumberParseException
+    public static function countryRequired(?string $number): self
     {
         $exception = new self(
             libNumberParseException::INVALID_COUNTRY_CODE,
@@ -39,7 +39,7 @@ final class NumberParseException extends libNumberParseException
         return $exception;
     }
 
-    public static function countryMismatch(string $number, array|string $countries): NumberParseException
+    public static function countryMismatch(string $number, array|string $countries): self
     {
         $countries = array_filter(is_array($countries) ? $countries : [$countries]);
 

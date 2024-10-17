@@ -31,13 +31,13 @@ class PhoneNumberCountry
 
     public static function isValid($code): bool
     {
-        return ! is_null($code) && in_array(strtoupper((string)$code), static::all(), true);
+        return $code !== null && in_array(strtoupper((string)$code), static::all(), true);
     }
 
     public static function sanitize($countries): string|array|null
     {
         $sanitized = Collection::make(is_array($countries) ? $countries : [$countries])
-            ->filter(fn($value): bool => static::isValid($value))->map(fn($value): string => strtoupper((string)$value))->unique();
+            ->filter(fn ($value): bool => static::isValid($value))->map(fn ($value): string => strtoupper((string)$value))->unique();
 
         return is_array($countries) ? $sanitized->toArray() : $sanitized->first();
     }
