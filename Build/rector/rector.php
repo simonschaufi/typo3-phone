@@ -21,10 +21,10 @@ return static function (RectorConfig $rectorConfig): void {
         __DIR__ . '/../../Tests',
         __DIR__ . '/../../ext_emconf.php',
     ]);
-    $rectorConfig->phpVersion(PhpVersion::PHP_81);
+    $rectorConfig->phpVersion(PhpVersion::PHP_82);
     $rectorConfig->sets([
         // Rector sets
-        LevelSetList::UP_TO_PHP_81,
+        LevelSetList::UP_TO_PHP_82,
         SetList::CODE_QUALITY,
         SetList::DEAD_CODE,
         SetList::STRICT_BOOLEANS,
@@ -37,7 +37,7 @@ return static function (RectorConfig $rectorConfig): void {
         // TYPO3 Sets
         Typo3SetList::CODE_QUALITY,
         Typo3SetList::GENERAL,
-        Typo3LevelSetList::UP_TO_TYPO3_12,
+        Typo3LevelSetList::UP_TO_TYPO3_13,
     ]);
     $rectorConfig->phpstanConfig(Typo3Option::PHPSTAN_FOR_RECTOR_PATH);
     $rectorConfig->rules([
@@ -45,14 +45,14 @@ return static function (RectorConfig $rectorConfig): void {
         ConvertImplicitVariablesToExplicitGlobalsRector::class,
     ]);
     $rectorConfig->ruleWithConfiguration(ExtEmConfRector::class, [
-        ExtEmConfRector::PHP_VERSION_CONSTRAINT => '8.1.0-8.3.99',
-        ExtEmConfRector::TYPO3_VERSION_CONSTRAINT => '12.4.0-12.4.99',
+        ExtEmConfRector::PHP_VERSION_CONSTRAINT => '8.2.0-8.4.99',
+        ExtEmConfRector::TYPO3_VERSION_CONSTRAINT => '13.4.0-13.4.99',
         ExtEmConfRector::ADDITIONAL_VALUES_TO_BE_REMOVED => []
     ]);
     $rectorConfig->importNames();
     $rectorConfig->importShortClasses(false);
     $rectorConfig->skip([
         // Strict
-        DisallowedEmptyRuleFixerRector::class
+        DisallowedEmptyRuleFixerRector::class,
     ]);
 };
