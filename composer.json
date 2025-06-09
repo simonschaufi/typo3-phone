@@ -32,7 +32,7 @@
         "phpunit/phpunit": "^11.5.21",
         "roave/security-advisories": "dev-latest",
         "squizlabs/php_codesniffer": "^3.13.0",
-        "ssch/typo3-rector": "^3.3.0",
+        "ssch/typo3-rector": "^3.4.3",
         "symfony/cache": "^7.3.0",
         "symfony/cache-contracts": "^3.6.0",
         "symfony/console": "^7.2.6",
