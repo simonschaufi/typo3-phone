@@ -31,7 +31,7 @@
         "phpstan/phpstan-phpunit": "^2.0.6",
         "phpunit/phpunit": "^11.5.21",
         "roave/security-advisories": "dev-latest",
-        "squizlabs/php_codesniffer": "^3.13.1",
+        "squizlabs/php_codesniffer": "^3.13.2",
         "ssch/typo3-rector": "^3.4.3",
         "symfony/cache": "^7.3.0",
         "symfony/cache-contracts": "^3.6.0",
