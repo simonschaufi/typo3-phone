@@ -39,7 +39,7 @@
         "symfony/event-dispatcher": "^7.3.3",
         "symfony/event-dispatcher-contracts": "^3.6.0",
         "symfony/translation": "^7.2.6",
-        "symfony/var-exporter": "^7.3.3",
+        "symfony/var-exporter": "^7.3.4",
         "symfony/yaml": "^7.2.6",
         "symplify/easy-coding-standard": "^12.6",
         "typo3/class-alias-loader": "^1.2.0",
