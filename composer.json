@@ -43,7 +43,7 @@
         "symfony/yaml": "^7.2.6",
         "symplify/easy-coding-standard": "^13.0",
         "typo3/class-alias-loader": "^1.2.0",
-        "typo3/testing-framework": "^9.2.1"
+        "typo3/testing-framework": "^9.3.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
