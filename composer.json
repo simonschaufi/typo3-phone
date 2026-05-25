@@ -26,7 +26,7 @@
         "composer/pcre": "^3.3.2",
         "ergebnis/composer-normalize": "^2.52.0",
         "friendsofphp/php-cs-fixer": "^3.95.2",
-        "guzzlehttp/promises": "^2.3.0",
+        "guzzlehttp/promises": "^2.4.1",
         "phpstan/phpstan": "^2.1.55",
         "phpstan/phpstan-phpunit": "^2.0.16",
         "phpunit/phpunit": "^11.5.21",
