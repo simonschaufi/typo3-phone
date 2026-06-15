@@ -23,7 +23,7 @@
         "typo3/cms-core": "^13.4"
     },
     "require-dev": {
-        "composer/pcre": "^3.3.2",
+        "composer/pcre": "^3.4.0",
         "ergebnis/composer-normalize": "^2.52.0",
         "friendsofphp/php-cs-fixer": "^3.95.3",
         "guzzlehttp/promises": "^2.5.0",
