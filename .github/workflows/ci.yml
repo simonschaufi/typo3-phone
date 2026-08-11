@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: [8.2, 8.3, 8.4]
+        php: [8.2, 8.3, 8.4, 8.5]
 
     name: "PHP linter - ${{ matrix.php }}"
 
@@ -66,11 +66,11 @@ jobs:
           coverage: none
           tools: composer:v2
 
-      - name: "Show Composer version"
-        run: composer --version
+#      - name: "Show Composer version"
+#        run: composer --version
 
-      - name: "Show the Composer configuration"
-        run: composer config --global --list
+#      - name: "Show the Composer configuration"
+#        run: composer config --global --list
 
       - name: "Cache dependencies installed with composer"
         uses: actions/cache@v6
@@ -82,8 +82,8 @@ jobs:
       - name: "Install Composer dependencies"
         run: composer install --no-progress
 
-      - name: "List Installed Dependencies"
-        run: composer show -D
+#      - name: "List Installed Dependencies"
+#        run: composer show -D
 
       - name: "Run command"
         run: composer ci:${{ matrix.command }}
@@ -95,8 +95,8 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: [8.2, 8.3, 8.4]
-        typo3: ["^13.4"]
+        php: [8.2, 8.3, 8.4, 8.5]
+        typo3: ["^14.3"]
         stability: [prefer-lowest, prefer-stable]
 #        include:
 #          - typo3: "^13.0"
@@ -119,11 +119,11 @@ jobs:
           coverage: none
           tools: composer:v2
 
-      - name: "Show Composer version"
-        run: composer --version
+#      - name: "Show Composer version"
+#        run: composer --version
 
-      - name: "Show the Composer configuration"
-        run: composer config --global --list
+#      - name: "Show the Composer configuration"
+#        run: composer config --global --list
 
       - name: "Cache dependencies installed with composer"
         uses: actions/cache@v6
@@ -135,8 +135,8 @@ jobs:
       - name: "Install dependencies"
         run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
-      - name: "List installed dependencies"
-        run: composer show -D
+#      - name: "List installed dependencies"
+#        run: composer show -D
 
       - name: "Run unit tests"
         run: composer ci:tests:unit
@@ -150,8 +150,8 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: [8.2, 8.3, 8.4]
-        typo3: ["^13.4"]
+        php: [8.2, 8.3, 8.4, 8.5]
+        typo3: ["^14.3"]
         stability: [prefer-lowest, prefer-stable]
     #        include:
     #          - typo3: "^13.0"
@@ -175,11 +175,11 @@ jobs:
           extensions: intl, mbstring, pdo_sqlite
           coverage: none
 
-      - name: "Show Composer version"
-        run: composer --version
+#      - name: "Show Composer version"
+#        run: composer --version
 
-      - name: "Show the Composer configuration"
-        run: composer config --global --list
+#      - name: "Show the Composer configuration"
+#        run: composer config --global --list
 
       - name: "Cache dependencies installed with composer"
         uses: actions/cache@v6
@@ -191,8 +191,8 @@ jobs:
       - name: "Install dependencies"
         run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
-      - name: "List installed dependencies"
-        run: composer show -D
+#      - name: "List installed dependencies"
+#        run: composer show -D
 
       - name: "Run functional tests"
         run: |

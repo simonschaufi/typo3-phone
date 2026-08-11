@@ -15,34 +15,37 @@
             "email": "simonschaufi@users.noreply.github.com"
         }
     ],
+    "support": {
+        "issues": "https://github.com/simonschaufi/typo3-phone/issues"
+    },
     "require": {
         "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
         "ext-json": "*",
-        "giggsey/libphonenumber-for-php": "^8.13.47",
-        "simonschaufi/typo3-support": "^3.1.1",
-        "typo3/cms-core": "^13.4"
+        "giggsey/libphonenumber-for-php": "^8.13.55",
+        "simonschaufi/typo3-support": "^3.1.2",
+        "typo3/cms-core": "^14.3.4"
     },
     "require-dev": {
         "composer/pcre": "^3.4.0",
         "ergebnis/composer-normalize": "^2.52.0",
         "friendsofphp/php-cs-fixer": "^3.95.18",
-        "guzzlehttp/promises": "^2.5.1",
+        "guzzlehttp/promises": "^2.5.2",
         "phpstan/phpstan": "^2.2.8",
         "phpstan/phpstan-phpunit": "^2.0.18",
-        "phpunit/phpunit": "^11.5.21",
+        "phpunit/phpunit": "^11.5.56",
         "roave/security-advisories": "dev-latest",
         "squizlabs/php_codesniffer": "^4.0.4",
         "ssch/typo3-rector": "^3.14.4",
-        "symfony/cache": "^7.3.6",
+        "symfony/cache": "^7.4.16",
         "symfony/cache-contracts": "^3.7.1",
-        "symfony/console": "^7.2.6",
-        "symfony/event-dispatcher": "^7.3.3",
+        "symfony/console": "^7.4.16",
+        "symfony/event-dispatcher": "^7.4.15",
         "symfony/event-dispatcher-contracts": "^3.7.1",
-        "symfony/translation": "^7.2.6",
-        "symfony/var-exporter": "^7.3.4",
-        "symfony/yaml": "^7.2.6",
+        "symfony/translation": "^7.4.16",
+        "symfony/var-exporter": "^7.4.16",
+        "symfony/yaml": "^7.4.15",
         "symplify/easy-coding-standard": "^13.2",
-        "typo3/class-alias-loader": "^1.2.0",
+        "typo3/class-alias-loader": "^2.0",
         "typo3/testing-framework": "^9.6.1"
     },
     "minimum-stability": "dev",
@@ -69,8 +72,11 @@
     },
     "extra": {
         "typo3/cms": {
-            "cms-package-dir": "{$vendor-dir}/typo3/cms",
+            "Package": {
+                "providesPackages": {}
+            },
             "extension-key": "typo3_phone",
+            "version": "4.0.0",
             "web-dir": ".Build/public"
         }
     },
