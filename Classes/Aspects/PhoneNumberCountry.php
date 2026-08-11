@@ -26,7 +26,7 @@ class PhoneNumberCountry
 {
     public static function all(): array
     {
-        return array_map('strtoupper', PhoneNumberUtil::getInstance()->getSupportedRegions());
+        return array_map(strtoupper(...), PhoneNumberUtil::getInstance()->getSupportedRegions());
     }
 
     public static function isValid($code): bool

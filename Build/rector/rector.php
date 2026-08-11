@@ -29,7 +29,6 @@ return static function (RectorConfig $rectorConfig): void {
         LevelSetList::UP_TO_PHP_82,
         SetList::CODE_QUALITY,
         SetList::DEAD_CODE,
-        SetList::STRICT_BOOLEANS,
         //SetList::NAMING,
         SetList::PRIVATIZATION,
         SetList::TYPE_DECLARATION,
