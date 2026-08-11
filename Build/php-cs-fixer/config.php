@@ -34,8 +34,7 @@ return (new Config())
                 __DIR__ . '/../../Tests/',
             ])
             // warning: these are relative paths!
-            ->notPath([
-            ])
+            ->notPath([])
     )
     ->setCacheFile('Build/php-cs-fixer/.php-cs-fixer.cache')
     ->setRiskyAllowed(true)
