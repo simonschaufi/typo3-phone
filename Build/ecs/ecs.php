@@ -5,6 +5,7 @@ declare(strict_types=1);
 use PhpCsFixer\Fixer\Basic\SingleLineEmptyBodyFixer;
 use PhpCsFixer\Fixer\CastNotation\CastSpacesFixer;
 use PhpCsFixer\Fixer\ClassNotation\OrderedClassElementsFixer;
+use PhpCsFixer\Fixer\Comment\HeaderCommentFixer;
 use PhpCsFixer\Fixer\Operator\OperatorLinebreakFixer;
 use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
 use PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer;
@@ -52,6 +53,23 @@ return static function (ECSConfig $ecsConfig): void {
         'space' => 'none',
     ]);
 
+    $ecsConfig->ruleWithConfiguration(HeaderCommentFixer::class, [
+        'header' => <<<EOF
+This file is part of the TYPO3 CMS project.
+
+(c) Simon Schaufelberger
+
+It is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License, either version 2
+of the License, or any later version.
+
+For the full copyright and license information, please read the
+LICENSE file that was distributed with this source code.
+
+The TYPO3 project - inspiring people to share!
+EOF
+    ]);
+
     // Rules that are not in a set
     $ecsConfig->rule(OperatorLinebreakFixer::class);
     $ecsConfig->rule(SingleLineEmptyBodyFixer::class);
@@ -77,6 +95,10 @@ return static function (ECSConfig $ecsConfig): void {
         ],
         ArrayIndentationFixer::class => [
             __DIR__ . '/../../Tests/*',
+        ],
+        HeaderCommentFixer::class => [
+            __DIR__ . '/../../ext_emconf.php',
+            __DIR__ . '/../../Build',
         ],
     ]);
 };
