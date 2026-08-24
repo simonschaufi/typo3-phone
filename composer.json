@@ -28,7 +28,7 @@
     "require-dev": {
         "composer/pcre": "^3.4.0",
         "ergebnis/composer-normalize": "^2.52.0",
-        "friendsofphp/php-cs-fixer": "^3.95.18",
+        "friendsofphp/php-cs-fixer": "^3.95.20",
         "guzzlehttp/promises": "^3.0.1",
         "phpstan/phpstan": "^2.2.8",
         "phpstan/phpstan-phpunit": "^2.0.18",
