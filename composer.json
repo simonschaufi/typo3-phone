@@ -35,7 +35,7 @@
         "phpunit/phpunit": "^11.5.56",
         "roave/security-advisories": "dev-latest",
         "squizlabs/php_codesniffer": "^4.0.4",
-        "ssch/typo3-rector": "^3.14.4",
+        "ssch/typo3-rector": "^3.15.0",
         "symfony/cache": "^7.4.16",
         "symfony/cache-contracts": "^3.7.1",
         "symfony/console": "^7.4.16",
