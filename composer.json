@@ -44,7 +44,7 @@
         "symfony/translation": "^7.4.16",
         "symfony/var-exporter": "^7.4.16",
         "symfony/yaml": "^7.4.15",
-        "symplify/easy-coding-standard": "^13.2",
+        "symplify/easy-coding-standard": "^13.3",
         "typo3/class-alias-loader": "^2.0",
         "typo3/testing-framework": "^9.6.1"
     },
